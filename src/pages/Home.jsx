@@ -1,6 +1,6 @@
-import SignInSide from "../components/SignInSide/SignInSide";
+import { SignIn } from "../components/SignIn";
 
 function Home() {
-  return <SignInSide />;
+  return <SignIn />;
 }
 export default Home;
