@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import * as React from "react";
+import { useState } from "react";
 import {
   Avatar,
   Box,
@@ -12,10 +12,23 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
+import { SignUp } from "../SignUp";
 import FooterSI from "./FooterSI"; //sign in footer imported as a separate component
 import FertilizeImg from "../../assets/fertilize.png";
 
 export default function SignInSide() {
+  const [activeModal, setActiveModal] = useState(false);
+
+  const handleOpen = () => {
+    // console.log("Modal Opened");
+    setActiveModal(true);
+  };
+
+  const handleClose = () => {
+    // console.log("Modal closed");
+    setActiveModal(false);
+  };
+
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
@@ -83,30 +96,32 @@ export default function SignInSide() {
           <Typography component="p" variant="body1">
             Conectando Amigos y Paquerxs
           </Typography>
+          {/* LOGIN FORM */}
           <Box
             component="form"
-            noValidate
+            // noValidate
             onSubmit={handleSubmit}
             sx={{ mt: 1 }}
           >
             <TextField
-              margin="normal"
+              type="email"
               required
-              fullWidth
               id="email"
-              label="Email"
+              label="Correo / Email"
               name="email"
+              margin="normal"
               autoComplete="email"
+              fullWidth
               autoFocus
             />
             <TextField
-              margin="normal"
-              required
-              fullWidth
-              name="password"
-              label="Contraseña"
               type="password"
               id="password"
+              required
+              label="Contraseña"
+              name="password"
+              margin="normal"
+              fullWidth
               autoComplete="current-password"
             />
             <FormControlLabel
@@ -121,20 +136,24 @@ export default function SignInSide() {
             >
               Ingresar
             </Button>
-            <Grid container>
-              {/* <Grid item xs>
-                <Link href="#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid> */}
-              <Grid item textAlign={"center"} width={"100%"}>
-                <Link href="#" variant="body2">
-                  {"No tienes cuenta? Crea tu usuario"}
-                </Link>
-              </Grid>
-            </Grid>
-            <FooterSI sx={{ mt: 3, fontSize: "10px" }} />
           </Box>
+          {/* BOTTOM SECTION */}
+          <Grid container>
+            <Grid item textAlign={"center"} width={"100%"}>
+              <Typography variant="body2">
+                ¿No tienes cuenta?{" "}
+                <span>
+                  <Link component="button" variant="body2" onClick={handleOpen}>
+                    Crea tu usuario
+                  </Link>
+                </span>
+              </Typography>
+            </Grid>
+            {activeModal && (
+              <SignUp open={activeModal} handleClose={handleClose}></SignUp>
+            )}
+          </Grid>
+          <FooterSI sx={{ mt: 3, fontSize: "10px" }} />
         </Box>
       </Grid>
     </Grid>

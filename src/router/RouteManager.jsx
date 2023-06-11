@@ -1,5 +1,6 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import { Home, UserDashboard } from "../pages";
+import { DevTest } from "../pages/DevTest";
 
 const routerConfig = createBrowserRouter([
   {
@@ -10,6 +11,10 @@ const routerConfig = createBrowserRouter([
   {
     path: "/dashboard",
     element: <UserDashboard />,
+  },
+  {
+    path: "/devtest",
+    element: <DevTest />,
   },
 ]);
 
