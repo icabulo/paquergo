@@ -15,10 +15,16 @@ import {
 import { SignUp } from "../SignUp";
 import FooterSI from "./FooterSI"; //sign in footer imported as a separate component
 import FertilizeImg from "../../assets/fertilize.png";
+import { Navigate } from "react-router-dom";
+import { useSelector, useDispatch } from "react-redux";
+import { setIsLoading } from "../../Redux/features/user/userSlice.js";
 
 export default function SignInSide() {
   const [activeModal, setActiveModal] = useState(false);
+  const { isLoading } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
 
+  console.log("is loading", isLoading);
   const handleOpen = () => {
     // console.log("Modal Opened");
     setActiveModal(true);
@@ -36,11 +42,13 @@ export default function SignInSide() {
       email: data.get("email"),
       password: data.get("password"),
     });
+    dispatch(setIsLoading(false));
   };
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       {/* left image */}
+      {!isLoading && <Navigate to="/dashboard" replace={true} />}
       <Grid
         item
         xs={false}

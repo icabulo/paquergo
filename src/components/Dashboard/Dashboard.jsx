@@ -21,6 +21,8 @@ import { mainListItems, secondaryListItems } from "./ListItems";
 import Chart from "./Chart";
 import Deposits from "./Deposits";
 import Orders from "./Orders";
+import { useSelector, useDispatch } from "react-redux";
+import { defaultTheme, paquerTheme } from "../../themes/userThemes";
 
 function Copyright(props) {
   return (
@@ -86,17 +88,15 @@ const Drawer = styled(MuiDrawer, {
   },
 }));
 
-// TODO remove, this demo shouldn't need to reset the theme.
-const defaultTheme = createTheme();
-
 export default function Dashboard() {
+  const { userType } = useSelector((store) => store.user);
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
   };
 
   return (
-    <ThemeProvider theme={defaultTheme}>
+    <ThemeProvider theme={userType === "paquerx" ? paquerTheme : defaultTheme}>
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
         <AppBar position="absolute" open={open}>

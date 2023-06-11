@@ -11,35 +11,12 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { SignUp } from "../../components/SignUp";
-import { useState } from "react";
+import { SelectRole } from "../../components/SelectRole";
 
 function DevTest() {
-  const [activeModal, setActiveModal] = useState(false);
-
-  const handleOpen = () => {
-    console.log("Modal Opened");
-    setActiveModal(true);
-  };
-
-  const handleClose = () => {
-    console.log("Modal closed");
-    setActiveModal(false);
-  };
-
-  /*  const handleClick = () => {
-    console.log("Toggle click");
-    setActiveModal((prev) => !prev);
-  }; */
-
   return (
     <div>
-      <Button onClick={handleOpen}>Open Modal</Button>
-      <Button onClick={handleClose}>Close Modal</Button>
-
-      {activeModal && (
-        <SignUp open={activeModal} handleClose={handleClose}></SignUp>
-      )}
+      <SelectRole />
     </div>
   );
 }
