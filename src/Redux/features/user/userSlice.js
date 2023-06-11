@@ -5,6 +5,7 @@ const initialState = {
   userId: "",
   userFetchedData: [],
   isLoading: true,
+  userType: "not selected",
 };
 
 // get data from API with thunk and a helper function fetchCocktails
@@ -20,6 +21,12 @@ const userSlice = createSlice({
     setUserId: (state, action) => {
       state.userId = action.payload;
     },
+    setUserType: (state, action) => {
+      state.userType = action.payload;
+    },
+    setIsLoading: (state, action) => {
+      state.isLoading = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -34,5 +41,5 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserId } = userSlice.actions;
+export const { setUserId, setIsLoading, setUserType } = userSlice.actions;
 export default userSlice.reducer;

@@ -26,9 +26,6 @@ function SignUp({ open = false, handleClose }) {
     border: "secondary",
     boxShadow: 24,
     p: 2,
-    // display: "flex",
-    // flexDirection: "column",
-    // alignitems: "center",
   };
 
   return (
