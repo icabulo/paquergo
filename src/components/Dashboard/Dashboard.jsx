@@ -18,11 +18,13 @@ import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 import { mainListItems, secondaryListItems } from "./ListItems";
-import Chart from "./Chart";
-import Deposits from "./Deposits";
-import Orders from "./Orders";
+import Chart from "./DisplayArea/Chart";
+import Deposits from "./DisplayArea/Deposits";
+import Orders from "./DisplayArea/Orders";
 import { useSelector, useDispatch } from "react-redux";
 import { defaultTheme, paquerTheme } from "../../themes/userThemes";
+import { useNavigate } from "react-router-dom";
+import { Button } from "@mui/material";
 
 function Copyright(props) {
   return (
@@ -90,6 +92,7 @@ const Drawer = styled(MuiDrawer, {
 
 export default function Dashboard() {
   const { userType } = useSelector((store) => store.user);
+  const navigate = useNavigate();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
@@ -97,8 +100,10 @@ export default function Dashboard() {
 
   return (
     <ThemeProvider theme={userType === "paquerx" ? paquerTheme : defaultTheme}>
+      {/* toda la pantalla */}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
+        {/* barra superior de color */}
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
@@ -131,8 +136,12 @@ export default function Dashboard() {
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <Button color="inherit" onClick={() => navigate("/")}>
+              Cerrar sesion
+            </Button>
           </Toolbar>
         </AppBar>
+        {/* menu desplegrable izquierda */}
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -153,6 +162,7 @@ export default function Dashboard() {
             {secondaryListItems}
           </List>
         </Drawer>
+        {/* pantalla principal main */}
         <Box
           component="main"
           sx={{
@@ -163,11 +173,17 @@ export default function Dashboard() {
             flexGrow: 1,
             height: "100vh",
             overflow: "auto",
+            // border: "1px solid red",
           }}
         >
+          {/* this toolbar makes the display artea to be located below the colored dashboard title */}
           <Toolbar />
-          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
-            <Grid container spacing={3}>
+          {/* contenido desplegado en ventana main + copyright footer*/}
+          <Container
+            maxWidth="lg"
+            sx={{ mt: 4, mb: 4, border: "1px solid red" }}
+          >
+            <Grid container spacing={3} sx={{ border: "1px solid black" }}>
               {/* Chart */}
               <Grid item xs={12} md={8} lg={9}>
                 <Paper
@@ -176,6 +192,7 @@ export default function Dashboard() {
                     display: "flex",
                     flexDirection: "column",
                     height: 240,
+                    border: "1px solid blue",
                   }}
                 >
                   <Chart />
