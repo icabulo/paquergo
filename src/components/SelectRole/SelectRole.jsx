@@ -4,6 +4,7 @@ import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUserType } from "../../Redux/features/user/userSlice";
 
+//TODO: formulario de nombre personalizado y imagen de perfil
 function SelectRole() {
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
