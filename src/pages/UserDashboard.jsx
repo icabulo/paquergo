@@ -1,7 +1,6 @@
 import { useSelector } from "react-redux";
-import { Dashboard } from "../components/Dashboard";
 import { SelectRole } from "../components/SelectRole";
-// import { SignIn } from "../components/SignIn";
+import { Outlet } from "react-router-dom";
 
 function UserDashboard() {
   const { userType } = useSelector((store) => store.user);
@@ -9,7 +8,8 @@ function UserDashboard() {
   return (
     <>
       {userType === "not selected" && <SelectRole />}
-      <Dashboard />
+      {/* Dashboad will be reandered as a route component in this outlet */}
+      <Outlet />
     </>
   );
 }
