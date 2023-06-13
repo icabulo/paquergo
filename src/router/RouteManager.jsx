@@ -1,57 +1,35 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { Home, UserDashboard } from "../pages";
+import { Home, UserDashboard, ErrorPage } from "../pages";
 import { DevTest } from "../pages/DevTest";
-
-/* const routerConfig = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-    errorElement: <div>Hubo un error!!</div>,
-  },
-  {
-    path: "/dashboard",
-    element: <UserDashboard />,
-  },
-  {
-    path: "/devtest",
-    element: <DevTest />,
-  },
-]); */
+import { Dashboard } from "../components/Dashboard";
+import { InitialDisplay, Orders } from "../components/Dashboard/DisplayArea";
+import { Chat } from "../components/Chat";
+import { EditProfile } from "../components/EditProfile";
 
 const CustomRouter = () => (
   <BrowserRouter>
     <Routes>
-      <Route path="/" element={<Home />}></Route>
-      <Route path="/dashboard" element={<UserDashboard />}></Route>
-      <Route path="/devtest/*" element={<DevTest />}></Route>
-      <Route path="*" element={<div>404 not found</div>}></Route>
+      <Route path="/" element={<Home />} errorElement={ErrorPage}></Route>
+      <Route path="/dashboard/" element={<UserDashboard />}>
+        <Route path="" element={<Dashboard />}>
+          <Route path="main" element={<InitialDisplay />}></Route>
+          <Route path="heed" element={<Orders />}></Route>
+          <Route path="chat" element={<Chat />}></Route>
+          <Route path="profile" element={<EditProfile />}></Route>
+        </Route>
+      </Route>
+      <Route path="/devtest/" element={<DevTest />}></Route>
+      {/* <Route path="/devtest/*" element={<DevTest />}>
+        <Route path="" element={<Nested />}>
+          <Route path="user" element={<p>doble nested</p>}></Route>
+          <Route path="contacts" element={<p>contactos</p>}></Route>
+        </Route>
+
+        <Route path="second" element={<p>segundo</p>}></Route>
+      </Route> */}
+      {/* <Route path="*" element={<ErrorPage />}></Route> */}
     </Routes>
   </BrowserRouter>
 );
 
 export { CustomRouter };
-/* import { createBrowserRouter, RouterProvider } from "react-router-dom";
-import { Home, UserDashboard } from "../pages";
-import { DevTest } from "../pages/DevTest";
-
-const routerConfig = createBrowserRouter([
-  {
-    path: "/",
-    element: <Home />,
-    errorElement: <div>Hubo un error!!</div>,
-  },
-  {
-    path: "/dashboard",
-    element: <UserDashboard />,
-  },
-  {
-    path: "/devtest",
-    element: <DevTest />,
-  },
-]);
-
-const CustomRouter = () => (
-  <RouterProvider router={routerConfig}></RouterProvider>
-);
-
-export { CustomRouter }; */

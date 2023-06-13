@@ -1,6 +1,6 @@
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Outlet, Link as RouterLink } from "react-router-dom";
 
 //MATERIAL UI
 import {
@@ -20,8 +20,6 @@ import {
 import { AppBar, Drawer } from "./customStyle.js";
 import { ThemeProvider } from "@mui/material/styles";
 import { defaultTheme, paquerTheme } from "../../themes/userThemes";
-import { Chart, Deposits, Orders } from "./DisplayArea";
-import { mainListItems, secondaryListItems } from "./ListItems.jsx";
 
 //ICONS
 import MenuIcon from "@mui/icons-material/Menu";
@@ -29,6 +27,9 @@ import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
 import NotificationsIcon from "@mui/icons-material/Notifications";
 
 import Copyright from "./FooterDB";
+import MainList from "./MainList.jsx";
+import SecondaryList from "./SecondaryList.jsx";
+import BadgeMenu from "../BadgeMenu/BadgeMenu.jsx";
 
 export default function Dashboard() {
   const { userType } = useSelector((store) => store.user);
@@ -69,13 +70,14 @@ export default function Dashboard() {
               noWrap
               sx={{ flexGrow: 1 }}
             >
-              Mi Comunidad
+              {userType === "paquerx" ? "Paquerx" : "Amigo Abastecedor"}
             </Typography>
             <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
             </IconButton>
+            <BadgeMenu />
             <Button color="inherit" onClick={() => navigate("/")}>
               Cerrar sesion
             </Button>
@@ -97,9 +99,11 @@ export default function Dashboard() {
           </Toolbar>
           <Divider />
           <List component="nav">
-            {mainListItems}
+            {/* {mainListItems} */}
+            <MainList />
             <Divider sx={{ my: 1 }} />
-            {secondaryListItems}
+            {/* {secondaryListItems} */}
+            <SecondaryList />
           </List>
         </Drawer>
         {/* pantalla principal main */}
@@ -123,41 +127,7 @@ export default function Dashboard() {
             maxWidth="lg"
             sx={{ mt: 4, mb: 4, border: "1px solid red" }}
           >
-            <Grid container spacing={3} sx={{ border: "1px solid black" }}>
-              {/* Chart */}
-              <Grid item xs={12} md={8} lg={9}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                    border: "1px solid blue",
-                  }}
-                >
-                  <Chart />
-                </Paper>
-              </Grid>
-              {/* Recent Deposits */}
-              <Grid item xs={12} md={4} lg={3}>
-                <Paper
-                  sx={{
-                    p: 2,
-                    display: "flex",
-                    flexDirection: "column",
-                    height: 240,
-                  }}
-                >
-                  <Deposits />
-                </Paper>
-              </Grid>
-              {/* Recent Orders */}
-              <Grid item xs={12}>
-                <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-                  <Orders />
-                </Paper>
-              </Grid>
-            </Grid>
+            <Outlet />
             <Copyright sx={{ pt: 4 }} />
           </Container>
         </Box>
