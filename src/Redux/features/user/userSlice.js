@@ -6,6 +6,8 @@ const initialState = {
   userFetchedData: [],
   isLoading: true,
   userType: "not selected",
+  userImageUrl:
+    "https://res.cloudinary.com/didek0hyg/image/upload/v1686776057/yd6cp2hymggt1bpmxegu.png",
 };
 
 // get data from API with thunk and a helper function fetchCocktails
@@ -24,6 +26,9 @@ const userSlice = createSlice({
     setUserType: (state, action) => {
       state.userType = action.payload;
     },
+    setUserImageUrl: (state, action) => {
+      state.userImageUrl = action.payload;
+    },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
@@ -41,5 +46,6 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserId, setIsLoading, setUserType } = userSlice.actions;
+export const { setUserId, setIsLoading, setUserType, setUserImageUrl } =
+  userSlice.actions;
 export default userSlice.reducer;

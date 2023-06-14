@@ -11,12 +11,12 @@ import Logout from "@mui/icons-material/Logout";
 import LayersIcon from "@mui/icons-material/Layers";
 import RecyclingIcon from "@mui/icons-material/Recycling";
 
-import avatarImage from "../../assets/compost2.png";
-import { useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { setUserType } from "../../Redux/features/user/userSlice";
 import { useNavigate } from "react-router-dom";
 
 export default function BadgeMenu() {
+  const { userImageUrl } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const [anchorEl, setAnchorEl] = React.useState(null);
@@ -38,7 +38,7 @@ export default function BadgeMenu() {
           aria-haspopup="true"
           aria-expanded={open ? "true" : undefined}
         >
-          <Avatar src={avatarImage} sx={{ width: 32, height: 32 }}>
+          <Avatar src={userImageUrl} sx={{ width: 32, height: 32 }}>
             M
           </Avatar>
         </IconButton>
