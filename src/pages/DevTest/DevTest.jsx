@@ -1,9 +1,9 @@
-import { BadgeMenu } from "../../components/BadgeMenu";
+import UploadInput from "../../components/EditProfile/UploadInput";
 
 function DevTest() {
   return (
     <>
-      <BadgeMenu />
+      <UploadInput />
     </>
   );
 }
