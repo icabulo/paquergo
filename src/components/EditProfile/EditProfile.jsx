@@ -4,6 +4,7 @@ import {
   FormControlLabel,
   Button,
   Checkbox,
+  Typography,
 } from "@mui/material";
 import UploadInput from "./UploadInput";
 
@@ -14,7 +15,7 @@ function EditProfile() {
 
   return (
     <>
-      <div>Formulario para editar perfil</div>
+      <Typography variant="h3">Mis datos</Typography>
       <UploadInput />
       <Box
         component="form"
@@ -23,36 +24,28 @@ function EditProfile() {
         sx={{ mt: 1 }}
       >
         <TextField
-          type="email"
+          type="text"
           required
-          id="email"
-          label="Correo / Email"
-          name="email"
+          id="username"
+          label="Nombre de usuario"
+          name="username"
           margin="normal"
-          autoComplete="email"
+          autoComplete="username"
           fullWidth
           autoFocus
         />
         <TextField
-          type="password"
-          id="password"
+          type="text"
+          id="adress"
           required
-          label="Contraseña"
-          name="password"
+          label="Dirección"
+          name="adress"
           margin="normal"
           fullWidth
-          autoComplete="current-password"
+          autoComplete="adress"
         />
-        <FormControlLabel
-          control={<Checkbox value="remember" color="primary" />}
-          label="Recordar mis datos"
-        />
-        <Button
-          type="submit"
-          fullWidth
-          variant="contained"
-          sx={{ mt: 3, mb: 2 }}
-        >
+
+        <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
           Guardar cambios
         </Button>
       </Box>
