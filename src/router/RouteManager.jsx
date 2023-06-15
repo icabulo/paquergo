@@ -5,6 +5,7 @@ import { Dashboard } from "../components/Dashboard";
 import { InitialDisplay, Orders } from "../components/Dashboard/DisplayArea";
 import { Chat } from "../components/Chat";
 import { EditProfile } from "../components/EditProfile";
+import { UserMap } from "../components/UserMap";
 
 const CustomRouter = () => (
   <BrowserRouter>
@@ -15,6 +16,7 @@ const CustomRouter = () => (
           <Route path="main" element={<InitialDisplay />}></Route>
           <Route path="heed" element={<Orders />}></Route>
           <Route path="chat" element={<Chat />}></Route>
+          <Route path="map" element={<UserMap />}></Route>
           <Route path="profile" element={<EditProfile />}></Route>
         </Route>
       </Route>

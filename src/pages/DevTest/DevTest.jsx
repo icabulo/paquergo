@@ -1,9 +1,9 @@
-import UploadInput from "../../components/EditProfile/UploadInput";
+import UserMap from "../../components/UserMap/UserMap";
 
 function DevTest() {
   return (
     <>
-      <UploadInput />
+      <UserMap />
     </>
   );
 }
