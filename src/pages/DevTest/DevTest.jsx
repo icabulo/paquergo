@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 // import UserMap from "../../components/UserMap/UserMap";
 
 import {
@@ -14,64 +15,71 @@ import {
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { useRef, useState } from "react";
-import { FormControl } from "@mui/base";
+import "./dev-test.css";
 
 function DevTest() {
   const initialLocation = [4.674848840293984, -74.06874582246627];
   const [inputLocation, setInputLocation] = useState(initialLocation);
+
   const locInput = useRef();
-  const handleSubmit = () => {
-    console.log("handleSubmit");
-  };
 
   const handleClick = () => {
-    const newLocation = locInput.current.value.split(",");
+    const newLocation = locInput.current.value;
     console.log("handleClick", newLocation);
-    setInputLocation(newLocation);
   };
 
-  const handleLocation = (e) => {
-    console.log("LOCATION", e.target.value);
-    const newLocation = e.target.value.split(",");
-    console.log("array", newLocation);
-    setInputLocation(newLocation);
+  //format text string into array of floats
+  const formatLocation = (text) => {
+    const [latitud, longitud] = text.split(",");
+    return [parseFloat(latitud), parseFloat(longitud)];
   };
-
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const data = new FormData(event.currentTarget);
+    const latlan = formatLocation(data.get("location")); //format text string into array of floats
+    console.log({
+      email: data.get("username"),
+      password: data.get("adress"),
+      location: latlan,
+    });
+    // dispatch(setIsLoading(false));
+  };
   return (
     <>
-      {/* <UserMap /> */}
-
       <Typography variant="h3">Crear aviso de Amigo</Typography>
 
-      <MapContainer
-        center={inputLocation ? inputLocation : initialLocation}
-        zoom={14}
-        scrollWheelZoom={true}
-      >
-        {/* <TileLayer
-        attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-      /> */}
-        <TileLayer
-          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-        />
-        <Marker
-          position={inputLocation ? inputLocation : initialLocation}
-          draggable
-          eventHandlers={{
-            click: () => {
-              console.log("marker clicked");
-            },
-            moveend: (e) => {
-              const latlng = latLng;
-              console.log("marker end", e.latlng);
-            },
-          }}
-        >
-          <Popup>Mi ubicación</Popup>
-        </Marker>
-      </MapContainer>
+      <div className="minimap">
+        <MapContainer center={initialLocation} zoom={14} scrollWheelZoom={true}>
+          <TileLayer
+            url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+            attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+          />
+          <Marker
+            position={inputLocation ? inputLocation : initialLocation}
+            draggable
+            autoPan
+            eventHandlers={{
+              click: (e) => {
+                const { lat, lng } = e.latlng;
+                setInputLocation([lat, lng]);
+                // console.log("marker clicked", e);
+              },
+              dragend: (e) => {
+                const { lat, lng } = e.target.getLatLng();
+                setInputLocation([lat, lng]);
+              },
+            }}
+          >
+            <Popup>
+              {`Mis coordenadas:`}
+              <br />
+              {`Lat: ${inputLocation[0].toFixed(
+                3
+              )}, Lng: ${inputLocation[1].toFixed(3)}`}
+            </Popup>
+          </Marker>
+        </MapContainer>
+      </div>
 
       <Box
         component="form"
@@ -89,32 +97,12 @@ function DevTest() {
           autoComplete="location"
           fullWidth
           autoFocus
-          placeholder="coordenadas: [log, lat], ejemplo: 4.674, -74.068"
+          placeholder="coordenadas: [lat, lng], ejemplo: 4.674, -74.068"
           inputRef={locInput}
+          value={inputLocation}
           // value={inputLocation ? inputLocation : undefined}
           // onChange={handleLocation}
         />
-
-        {/* <FormControl
-          // sx={{ width: "100%" }}
-          variant="outlined"
-          margin="normal"
-          // fullWidth
-          // error={formManager.repassword.activeError}
-        >
-          <InputLabel htmlFor="ejemplo">ejemplo</InputLabel>
-          <OutlinedInput
-            id="ejemplo"
-            required
-            type="text"
-            aria-describedby="repassword-helper-text"
-            label="ejemplo"
-            ref={locInput}
-          />
-          <FormHelperText id="repassword-helper-text">
-            coordenada
-          </FormHelperText>
-        </FormControl> */}
 
         <Button onClick={handleClick}>Mostrar en mapa</Button>
         <TextField

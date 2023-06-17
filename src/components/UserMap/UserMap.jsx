@@ -2,6 +2,7 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import { PacasMarker } from "./CustomMarkers";
 import { AmigosMarker } from "./CustomMarkers";
+import "./user-map.css";
 
 function UserMap() {
   const currentLocation = {
@@ -13,21 +14,23 @@ function UserMap() {
     lng: "-74.08152175280428",
   };
   return (
-    <MapContainer center={initialLocation} zoom={12} scrollWheelZoom={false}>
-      {/* <TileLayer
+    <div className="fullmap">
+      <MapContainer center={initialLocation} zoom={12} scrollWheelZoom={true}>
+        {/* <TileLayer
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
         url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
       /> */}
-      <TileLayer
-        url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-        attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
-      />
-      <Marker position={currentLocation}>
-        <Popup>Mi ubicación</Popup>
-      </Marker>
-      <PacasMarker />
-      <AmigosMarker />
-    </MapContainer>
+        <TileLayer
+          url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+          attribution='&copy; <a href="http://osm.org/copyright">OpenStreetMap</a> contributors'
+        />
+        <Marker position={currentLocation}>
+          <Popup>Mi ubicación</Popup>
+        </Marker>
+        <PacasMarker />
+        <AmigosMarker />
+      </MapContainer>
+    </div>
   );
 }
 export default UserMap;
