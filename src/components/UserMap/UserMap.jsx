@@ -5,14 +5,10 @@ import { AmigosMarker } from "./CustomMarkers";
 import "./user-map.css";
 
 function UserMap() {
-  const currentLocation = {
-    lat: "4.679163148484691",
-    lng: "-74.08483538520206",
-  };
-  const initialLocation = {
-    lat: "4.705112387457778",
-    lng: "-74.08152175280428",
-  };
+  const currentLocation = [4.679163148484691, -74.08483538520206];
+
+  const initialLocation = [4.705112387457778, -74.08152175280428];
+
   return (
     <div className="fullmap">
       <MapContainer center={initialLocation} zoom={12} scrollWheelZoom={true}>

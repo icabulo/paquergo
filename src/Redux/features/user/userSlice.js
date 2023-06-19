@@ -8,6 +8,7 @@ const initialState = {
   userType: "not selected",
   userImageUrl:
     "https://res.cloudinary.com/didek0hyg/image/upload/v1686776057/yd6cp2hymggt1bpmxegu.png",
+  myWasteList: [],
 };
 
 // get data from API with thunk and a helper function fetchCocktails
@@ -32,6 +33,9 @@ const userSlice = createSlice({
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    addToMyWastePost: (state, action) => {
+      state.myWasteList.push(action.payload);
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -46,6 +50,11 @@ const userSlice = createSlice({
   },
 });
 
-export const { setUserId, setIsLoading, setUserType, setUserImageUrl } =
-  userSlice.actions;
+export const {
+  setUserId,
+  setIsLoading,
+  setUserType,
+  setUserImageUrl,
+  addToMyWastePost,
+} = userSlice.actions;
 export default userSlice.reducer;
