@@ -11,21 +11,21 @@ import { useSnackbar } from "notistack";
 // Leaflet maps
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "./post-amigo.css";
+import "./post-paquerx.css";
 
 // redux
 import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { addToMyWastePost } from "../../Redux/features/user/userSlice";
-import { addWastePost } from "../../Redux/features/generalMap/generalMapSlice";
+import { addToMyPacaPost } from "../../Redux/features/user/userSlice";
+import { addPacaPost } from "../../Redux/features/generalMap/generalMapSlice";
 import { useState } from "react";
 
-function PostAmigo() {
+function PostPaquerx() {
   const dispatch = useDispatch();
-  const initialLocation = [4.674848840293984, -74.06874582246627];
+  const initialLocation = [4.664714323348144, -74.13093566894533];
   const [inputLocation, setInputLocation] = useState(initialLocation);
   const [dateInput, setDateInput] = useState(dayjs());
-  const [detailsInput, setDetailsInput] = useState("");
+  //   const [detailsInput, setDetailsInput] = useState("");
   const { enqueueSnackbar } = useSnackbar();
 
   //format text string into array of floats
@@ -40,20 +40,17 @@ function PostAmigo() {
 
     // same as in mock data. BUT GOT TO BE FORMATED FOR BACKEND
     const newPost = {
-      wasteId: nanoid(),
+      pacaId: nanoid(),
       location: latlan,
       info: {
         userName: "Mi usuario",
         userId: "testuser123",
         date: dateInput.toISOString(),
-        description: data.get("details"),
-        deliveryState: "pendiente", //pendiente, asignado, entregado
+        pacaState: "nuevo", //nuevo, modificado, finalizado
       },
     };
-    // console.log(newPost);
-    dispatch(addToMyWastePost(newPost));
-    dispatch(addWastePost(newPost));
-    setDetailsInput("");
+    dispatch(addToMyPacaPost(newPost));
+    dispatch(addPacaPost(newPost));
 
     //success message
     enqueueSnackbar("Aviso creado", {
@@ -67,7 +64,7 @@ function PostAmigo() {
   return (
     <>
       <Typography variant="h4">Crear nuevo aviso:</Typography>
-      <Typography variant="h5">Entrego desechos en:</Typography>
+      <Typography variant="h5">Haré paca en:</Typography>
 
       <div className="minimap">
         <MapContainer center={initialLocation} zoom={14} scrollWheelZoom={true}>
@@ -92,7 +89,7 @@ function PostAmigo() {
             }}
           >
             <Popup>
-              {`Mis coordenadas:`}
+              {`La Paca estará acá:`}
               <br />
               {`Lat: ${inputLocation[0].toFixed(
                 3
@@ -112,7 +109,7 @@ function PostAmigo() {
           type="text"
           required
           id="location"
-          label="Lugar de entraga"
+          label="Evento Paca"
           name="location"
           margin="normal"
           autoComplete="location"
@@ -127,7 +124,7 @@ function PostAmigo() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
               <DateTimePicker
-                label="Fecha de entrega"
+                label="Fecha del evento"
                 value={dateInput}
                 onChange={(newValue) => setDateInput(newValue)}
               />
@@ -135,7 +132,7 @@ function PostAmigo() {
           </LocalizationProvider>
         </Box>
 
-        <TextField
+        {/* <TextField
           type="text"
           required
           id="details"
@@ -149,13 +146,13 @@ function PostAmigo() {
           rows={2}
           value={detailsInput}
           onChange={(e) => setDetailsInput(e.target.value)}
-        />
+        /> */}
 
         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-          crear aviso
+          crear Paca
         </Button>
       </Box>
     </>
   );
 }
-export default PostAmigo;
+export default PostPaquerx;

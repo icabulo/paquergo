@@ -1,6 +1,7 @@
-import { PostAmigo } from "../../components/PostAmigo";
+// import { PostAmigo } from "../../components/PostAmigo";
+import { PostPaquerx } from "../../components/PostPaquerx";
 
 function DevTest() {
-  return <PostAmigo />;
+  return <PostPaquerx />;
 }
 export default DevTest;

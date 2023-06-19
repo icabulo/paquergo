@@ -6,7 +6,8 @@ import { InitialDisplay, Orders } from "../components/Dashboard/DisplayArea";
 import { Chat } from "../components/Chat";
 import { EditProfile } from "../components/EditProfile";
 import { UserMap } from "../components/UserMap";
-import { PostAmigo } from "../components/PostAmigo";
+// import { PostAmigo } from "../components/PostAmigo";
+import { PostFilterByRole } from "../components/PostFilterByRole";
 
 const CustomRouter = () => (
   <BrowserRouter>
@@ -15,7 +16,7 @@ const CustomRouter = () => (
       <Route path="/dashboard/" element={<UserDashboard />}>
         <Route path="" element={<Dashboard />}>
           <Route path="main" element={<InitialDisplay />}></Route>
-          <Route path="heed" element={<PostAmigo />}></Route>
+          <Route path="heed" element={<PostFilterByRole />}></Route>
           <Route path="chat" element={<Chat />}></Route>
           <Route path="map" element={<UserMap />}></Route>
           <Route path="profile" element={<EditProfile />}></Route>

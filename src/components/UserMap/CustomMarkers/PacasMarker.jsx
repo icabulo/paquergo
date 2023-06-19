@@ -1,11 +1,14 @@
 import { Marker, Popup } from "react-leaflet";
 import { pacaMarker } from "../MarkerIcons/MarkerIcons";
-import { allPacas } from "../../../Redux/mockData/pacasDatabase";
+// import { allPacas } from "../../../Redux/mockData/pacasDatabase";
+import { useSelector } from "react-redux";
 
 function PacasMarker() {
+  const { pacasList } = useSelector((store) => store.generalMap);
+
   return (
     <>
-      {allPacas.map((paca) => (
+      {pacasList.map((paca) => (
         <Marker key={paca.pacaId} position={paca.location} icon={pacaMarker}>
           <Popup>
             {paca.info.date} <br /> {`oraganiza: ${paca.info.userName}`} <br />{" "}
