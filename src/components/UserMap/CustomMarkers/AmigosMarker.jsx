@@ -1,11 +1,12 @@
 import { Marker, Popup } from "react-leaflet";
 import { amigoMarker } from "../MarkerIcons/MarkerIcons";
-import { allAmigos } from "../../../Redux/mockData/desechosDatabase";
+import { useSelector } from "react-redux";
 
 function AmigosMarker() {
+  const { wasteList } = useSelector((store) => store.generalMap);
   return (
     <>
-      {allAmigos.map((amigo) => (
+      {wasteList.map((amigo) => (
         <Marker
           key={amigo.wasteId}
           position={amigo.location}

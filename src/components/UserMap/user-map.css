@@ -1,0 +1,8 @@
+.fullmap {
+  width: 70vw;
+  max-width: 1000px;
+  height: 75vh;
+  margin: 0 auto;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}

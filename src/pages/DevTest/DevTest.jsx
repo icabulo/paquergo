@@ -1,10 +1,6 @@
-import UserMap from "../../components/UserMap/UserMap";
+import { PostAmigo } from "../../components/PostAmigo";
 
 function DevTest() {
-  return (
-    <>
-      <UserMap />
-    </>
-  );
+  return <PostAmigo />;
 }
 export default DevTest;
