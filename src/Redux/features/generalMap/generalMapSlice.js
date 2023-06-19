@@ -15,8 +15,11 @@ const generalMapSlice = createSlice({
     addWastePost: (state, action) => {
       state.wasteList.push(action.payload);
     },
+    addPacaPost: (state, action) => {
+      state.pacasList.push(action.payload);
+    },
   },
 });
 
-export const { addWastePost } = generalMapSlice.actions;
+export const { addWastePost, addPacaPost } = generalMapSlice.actions;
 export default generalMapSlice.reducer;
