@@ -15,7 +15,7 @@ function EditProfile() {
 
   return (
     <>
-      <Typography variant="h3">Mis datos</Typography>
+      <Typography variant="h4">Mis datos</Typography>
       <UploadInput />
       <Box
         component="form"

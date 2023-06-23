@@ -3,10 +3,16 @@ import { useSelector } from "react-redux";
 // import { PostPaquerx } from "../PostPaquerx";
 import { AmigoSet } from "../DataSet/Amigo";
 import { PaquerxSet } from "../DataSet/Paquerx";
+import { Typography } from "@mui/material";
 
 function PostFilterByRole() {
   const { userType } = useSelector((store) => store.user);
 
-  return <>{userType === "amigo" ? <AmigoSet /> : <PaquerxSet />}</>;
+  return (
+    <>
+      <Typography variant="h4">Mis avisos:</Typography>
+      {userType === "amigo" ? <AmigoSet /> : <PaquerxSet />}
+    </>
+  );
 }
 export default PostFilterByRole;
