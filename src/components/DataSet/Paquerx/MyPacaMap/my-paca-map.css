@@ -1,0 +1,8 @@
+.my-paca-map {
+  width: 70vw;
+  max-width: 400px;
+  height: 55vh;
+  margin: 20px auto;
+  border-radius: 0.5rem;
+  overflow: hidden;
+}

@@ -1,7 +1,10 @@
-// import { PostAmigo } from "../../components/PostAmigo";
-import { PostPaquerx } from "../../components/PostPaquerx";
+import { PaquerxSet } from "../../components/DataSet/Paquerx";
 
 function DevTest() {
-  return <PostPaquerx />;
+  return (
+    <>
+      <PaquerxSet />
+    </>
+  );
 }
 export default DevTest;
