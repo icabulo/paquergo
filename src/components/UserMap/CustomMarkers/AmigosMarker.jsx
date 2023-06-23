@@ -1,6 +1,7 @@
 import { Marker, Popup } from "react-leaflet";
 import { amigoMarker } from "../MarkerIcons/MarkerIcons";
 import { useSelector } from "react-redux";
+import dayjs from "dayjs";
 
 function AmigosMarker() {
   const { wasteList } = useSelector((store) => store.generalMap);
@@ -13,9 +14,10 @@ function AmigosMarker() {
           icon={amigoMarker}
         >
           <Popup>
-            {amigo.info.date} <br /> {`Detalles: ${amigo.info.description}`}
-            <br /> {`Entrega: ${amigo.info.userName}`} <br />
-            {`chat id: ${amigo.info.userId}`}
+            {dayjs(amigo.date).format("DD/MMMM/YYYY - HH:mm A")} <br />{" "}
+            {`Detalles: ${amigo.description}`}
+            <br /> {`Entrega: ${amigo.userName}`} <br />
+            {`chat id: ${amigo.userId}`}
           </Popup>
         </Marker>
       ))}

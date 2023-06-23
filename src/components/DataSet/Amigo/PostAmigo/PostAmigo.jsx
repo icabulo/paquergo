@@ -11,21 +11,21 @@ import { useSnackbar } from "notistack";
 // Leaflet maps
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "./post-paquerx.css";
+import "./post-amigo.css";
 
 // redux
 import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch } from "react-redux";
-import { addToMyPacaPost } from "../../Redux/features/user/userSlice";
-import { addPacaPost } from "../../Redux/features/generalMap/generalMapSlice";
+import { addToMyWastePost } from "../../../../Redux/features/user/userSlice";
+import { addWastePost } from "../../../../Redux/features/generalMap/generalMapSlice";
 import { useState } from "react";
 
-function PostPaquerx() {
+function PostAmigo() {
   const dispatch = useDispatch();
-  const initialLocation = [4.664714323348144, -74.13093566894533];
+  const initialLocation = [4.674848840293984, -74.06874582246627];
   const [inputLocation, setInputLocation] = useState(initialLocation);
   const [dateInput, setDateInput] = useState(dayjs());
-  //   const [detailsInput, setDetailsInput] = useState("");
+  const [detailsInput, setDetailsInput] = useState("");
   const { enqueueSnackbar } = useSnackbar();
 
   //format text string into array of floats
@@ -40,17 +40,25 @@ function PostPaquerx() {
 
     // same as in mock data. BUT GOT TO BE FORMATED FOR BACKEND
     const newPost = {
-      pacaId: nanoid(),
+      wasteId: nanoid(),
       location: latlan,
-      info: {
-        userName: "Mi usuario",
-        userId: "testuser123",
-        date: dateInput.toISOString(),
-        pacaState: "nuevo", //nuevo, modificado, finalizado
-      },
+      userName: "Mi usuario",
+      userId: "testuser123",
+      date: dateInput.toISOString(),
+      description: data.get("details"),
+      deliveryState: "pendiente", //pendiente, asignado, entregado
+      // info: {
+      //   userName: "Mi usuario",
+      //   userId: "testuser123",
+      //   date: dateInput.toISOString(),
+      //   description: data.get("details"),
+      //   deliveryState: "pendiente", //pendiente, asignado, entregado
+      // },
     };
-    dispatch(addToMyPacaPost(newPost));
-    dispatch(addPacaPost(newPost));
+    console.log(newPost);
+    dispatch(addToMyWastePost(newPost));
+    dispatch(addWastePost(newPost));
+    setDetailsInput("");
 
     //success message
     enqueueSnackbar("Aviso creado", {
@@ -64,7 +72,7 @@ function PostPaquerx() {
   return (
     <>
       <Typography variant="h4">Crear nuevo aviso:</Typography>
-      <Typography variant="h5">Haré paca en:</Typography>
+      <Typography variant="h5">Entrego desechos en:</Typography>
 
       <div className="minimap">
         <MapContainer center={initialLocation} zoom={14} scrollWheelZoom={true}>
@@ -89,7 +97,7 @@ function PostPaquerx() {
             }}
           >
             <Popup>
-              {`La Paca estará acá:`}
+              {`Mis coordenadas:`}
               <br />
               {`Lat: ${inputLocation[0].toFixed(
                 3
@@ -109,7 +117,7 @@ function PostPaquerx() {
           type="text"
           required
           id="location"
-          label="Evento Paca"
+          label="Lugar de entraga"
           name="location"
           margin="normal"
           autoComplete="location"
@@ -117,14 +125,14 @@ function PostPaquerx() {
           placeholder="coordenadas: [lat, lng], ejemplo: 4.674, -74.068"
           //   inputRef={locInput}
           value={inputLocation}
-          disabled
+          // disabled
         />
 
         <Box sx={{ width: "300px" }}>
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
               <DateTimePicker
-                label="Fecha del evento"
+                label="Fecha de entrega"
                 value={dateInput}
                 onChange={(newValue) => setDateInput(newValue)}
               />
@@ -132,7 +140,7 @@ function PostPaquerx() {
           </LocalizationProvider>
         </Box>
 
-        {/* <TextField
+        <TextField
           type="text"
           required
           id="details"
@@ -146,13 +154,13 @@ function PostPaquerx() {
           rows={2}
           value={detailsInput}
           onChange={(e) => setDetailsInput(e.target.value)}
-        /> */}
+        />
 
         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-          crear Paca
+          crear aviso
         </Button>
       </Box>
     </>
   );
 }
-export default PostPaquerx;
+export default PostAmigo;

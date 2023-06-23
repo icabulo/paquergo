@@ -1,5 +1,7 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { userRequestToApi } from "./userAPI";
+import { userWasteList } from "../../mockData/myWasteList";
+import { userPacaList } from "../../mockData/myPacaList";
 
 const initialState = {
   userId: "",
@@ -8,8 +10,8 @@ const initialState = {
   userType: "not selected",
   userImageUrl:
     "https://res.cloudinary.com/didek0hyg/image/upload/v1686776057/yd6cp2hymggt1bpmxegu.png",
-  myWasteList: [],
-  myPacaList: [],
+  myWasteList: userWasteList,
+  myPacaList: userPacaList,
 };
 
 // get data from API with thunk and a helper function fetchCocktails
