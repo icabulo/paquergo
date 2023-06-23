@@ -8,7 +8,7 @@ function UserDashboard() {
   return (
     <>
       {userType === "not selected" && <SelectRole />}
-      {/* Dashboad will be reandered as a route component in this outlet */}
+      {/* Dashboad will be rendered as a route component in this outlet */}
       <Outlet />
     </>
   );

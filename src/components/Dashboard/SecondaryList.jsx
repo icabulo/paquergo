@@ -20,12 +20,12 @@ function SecondaryList() {
         </ListItemIcon>
         <ListItemText primary="Chat" />
       </ListItemButton>
-      <ListItemButton component={RouterLink} to="map">
+      {/* <ListItemButton component={RouterLink} to="map">
         <ListItemIcon>
           <LocationOnIcon />
         </ListItemIcon>
         <ListItemText primary="Mapa" />
-      </ListItemButton>
+      </ListItemButton> */}
     </React.Fragment>
   );
 }

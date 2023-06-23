@@ -72,11 +72,11 @@ export default function Dashboard() {
             >
               {userType === "paquerx" ? "Paquerx" : "Amigo Abastecedor"}
             </Typography>
-            <IconButton color="inherit">
+            {/* <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
               </Badge>
-            </IconButton>
+            </IconButton> */}
             <BadgeMenu />
             <Button color="inherit" onClick={() => navigate("/")}>
               Cerrar sesion
@@ -120,13 +120,10 @@ export default function Dashboard() {
             // border: "1px solid red",
           }}
         >
-          {/* this toolbar makes the display artea to be located below the colored dashboard title */}
+          {/* this toolbar makes the display area to be located below the colored dashboard title */}
           <Toolbar />
           {/* contenido desplegado en ventana main + copyright footer*/}
-          <Container
-            maxWidth="lg"
-            sx={{ mt: 4, mb: 4, border: "1px solid red" }}
-          >
+          <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Outlet />
             <Copyright sx={{ pt: 4 }} />
           </Container>

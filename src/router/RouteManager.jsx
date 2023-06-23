@@ -15,23 +15,14 @@ const CustomRouter = () => (
       <Route path="/" element={<Home />} errorElement={ErrorPage}></Route>
       <Route path="/dashboard/" element={<UserDashboard />}>
         <Route path="" element={<Dashboard />}>
-          <Route path="main" element={<InitialDisplay />}></Route>
+          <Route path="main" element={<UserMap />}></Route>
           <Route path="heed" element={<PostFilterByRole />}></Route>
           <Route path="chat" element={<Chat />}></Route>
-          <Route path="map" element={<UserMap />}></Route>
+          {/* <Route path="map" element={<UserMap />}></Route> */}
           <Route path="profile" element={<EditProfile />}></Route>
         </Route>
       </Route>
       <Route path="/devtest/" element={<DevTest />}></Route>
-      {/* <Route path="/devtest/*" element={<DevTest />}>
-        <Route path="" element={<Nested />}>
-          <Route path="user" element={<p>doble nested</p>}></Route>
-          <Route path="contacts" element={<p>contactos</p>}></Route>
-        </Route>
-
-        <Route path="second" element={<p>segundo</p>}></Route>
-      </Route> */}
-      {/* <Route path="*" element={<ErrorPage />}></Route> */}
     </Routes>
   </BrowserRouter>
 );
