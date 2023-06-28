@@ -18,13 +18,16 @@ import FertilizeImg from "../../assets/fertilize.png";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsLoading } from "../../Redux/features/user/userSlice.js";
+import { loginRequest } from "../../api/auth";
+import { useSnackbar } from "notistack";
 
 export default function SignInSide() {
   const [activeModal, setActiveModal] = useState(false);
   const { isLoading } = useSelector((store) => store.user);
   const dispatch = useDispatch();
+  const { enqueueSnackbar } = useSnackbar();
 
-  console.log("is loading", isLoading);
+  // console.log("is loading", isLoading);
   const handleOpen = () => {
     // console.log("Modal Opened");
     setActiveModal(true);
@@ -35,14 +38,31 @@ export default function SignInSide() {
     setActiveModal(false);
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    console.log({
+    const loginData = {
       email: data.get("email"),
       password: data.get("password"),
-    });
-    dispatch(setIsLoading(false));
+    };
+    try {
+      const res = await loginRequest(loginData);
+      if (res.message === "user Logged in - token created") {
+        // console.log("usuario autendicado");
+        dispatch(setIsLoading(false)); //navigation through <Navigate> component below (conditional rendering)
+      } else {
+        enqueueSnackbar(`${res.message}`, {
+          variant: "warning",
+          anchorOrigin: {
+            vertical: "top",
+            horizontal: "right",
+          },
+          preventDuplicate: true,
+        });
+      }
+    } catch (error) {
+      console.log("login error", error);
+    }
   };
 
   return (

@@ -10,7 +10,7 @@ function FooterSI(props) {
         {...props}
       >
         {"Copyright © "}
-        <Link color="inherit" href="https://mui.com/">
+        <Link color="inherit" href="#">
           Your Website
         </Link>{" "}
         {new Date().getFullYear()}

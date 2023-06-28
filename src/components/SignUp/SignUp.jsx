@@ -47,7 +47,7 @@ function SignUp({ open = false, handleClose }) {
             alignitems: "center",
           }}
         >
-          <FormSignUp></FormSignUp>
+          <FormSignUp handleClose={handleClose}></FormSignUp>
         </Box>
       </Box>
     </Modal>
