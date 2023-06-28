@@ -6,7 +6,7 @@ import { ConversationsProvider } from "./contexts/ConversationsProvider";
 import { SocketProvider } from "./contexts/SocketProvider";
 
 function ChatApp() {
-  const [id, setId] = useLocalStorage("id");
+  const [id, setId] = useLocalStorage("id", "");
   // console.log(id);
 
   const chatDashboard = (

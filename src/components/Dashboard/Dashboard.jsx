@@ -1,5 +1,6 @@
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
+import { setIsAuthenticated } from "../../Redux/features/user/userSlice.js";
 import { useNavigate, Outlet, Link as RouterLink } from "react-router-dom";
 
 //MATERIAL UI
@@ -34,9 +35,15 @@ import BadgeMenu from "../BadgeMenu/BadgeMenu.jsx";
 export default function Dashboard() {
   const { userType } = useSelector((store) => store.user);
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const [open, setOpen] = React.useState(true);
   const toggleDrawer = () => {
     setOpen(!open);
+  };
+
+  const handleLogout = () => {
+    dispatch(setIsAuthenticated(false));
+    navigate("/");
   };
 
   return (
@@ -78,7 +85,7 @@ export default function Dashboard() {
               </Badge>
             </IconButton> */}
             <BadgeMenu />
-            <Button color="inherit" onClick={() => navigate("/")}>
+            <Button color="inherit" onClick={handleLogout}>
               Cerrar sesion
             </Button>
           </Toolbar>
