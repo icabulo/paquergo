@@ -13,6 +13,7 @@ import RecyclingIcon from "@mui/icons-material/Recycling";
 
 import { useSelector, useDispatch } from "react-redux";
 import { setUserType } from "../../Redux/features/user/userSlice";
+import { setIsAuthenticated } from "../../Redux/features/user/userSlice.js";
 import { useNavigate } from "react-router-dom";
 
 export default function BadgeMenu() {
@@ -27,6 +28,11 @@ export default function BadgeMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleLogout = () => {
+    dispatch(setIsAuthenticated(false));
+    navigate("/");
+  };
+
   return (
     <React.Fragment>
       <Tooltip title="Account settings">
@@ -56,7 +62,7 @@ export default function BadgeMenu() {
           </ListItemIcon>
           Editar mi perfil
         </MenuItem>
-        <MenuItem onClick={() => navigate("/")}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>

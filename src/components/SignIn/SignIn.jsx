@@ -17,17 +17,19 @@ import FooterSI from "./FooterSI"; //sign in footer imported as a separate compo
 import FertilizeImg from "../../assets/fertilize.png";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsLoading } from "../../Redux/features/user/userSlice.js";
+import {
+  setIsLoading,
+  setIsAuthenticated,
+} from "../../Redux/features/user/userSlice.js";
 import { loginRequest } from "../../api/auth";
 import { useSnackbar } from "notistack";
 
 export default function SignInSide() {
   const [activeModal, setActiveModal] = useState(false);
-  const { isLoading } = useSelector((store) => store.user);
+  const { isAuthenticated } = useSelector((store) => store.user);
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  // console.log("is loading", isLoading);
   const handleOpen = () => {
     // console.log("Modal Opened");
     setActiveModal(true);
@@ -49,6 +51,7 @@ export default function SignInSide() {
       const res = await loginRequest(loginData);
       if (res.message === "user Logged in - token created") {
         // console.log("usuario autendicado");
+        dispatch(setIsAuthenticated(true));
         dispatch(setIsLoading(false)); //navigation through <Navigate> component below (conditional rendering)
       } else {
         enqueueSnackbar(`${res.message}`, {
@@ -68,7 +71,7 @@ export default function SignInSide() {
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       {/* left image */}
-      {!isLoading && <Navigate to="/dashboard" replace={true} />}
+      {isAuthenticated && <Navigate to="/dashboard" replace={true} />}
       <Grid
         item
         xs={false}

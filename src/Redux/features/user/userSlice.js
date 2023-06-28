@@ -7,6 +7,7 @@ const initialState = {
   userId: "",
   userFetchedData: [],
   isLoading: true,
+  isAuthenticated: false,
   userType: "not selected",
   userImageUrl:
     "https://res.cloudinary.com/didek0hyg/image/upload/v1686776057/yd6cp2hymggt1bpmxegu.png",
@@ -36,6 +37,9 @@ const userSlice = createSlice({
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
     },
+    setIsAuthenticated: (state, action) => {
+      state.isAuthenticated = action.payload;
+    },
     addToMyWastePost: (state, action) => {
       state.myWasteList.push(action.payload);
     },
@@ -59,6 +63,7 @@ const userSlice = createSlice({
 export const {
   setUserId,
   setIsLoading,
+  setIsAuthenticated,
   setUserType,
   setUserImageUrl,
   addToMyWastePost,
