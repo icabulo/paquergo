@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const API = "http://localhost:3500/api";
+export const API = "http://localhost:3500/api";
 
 export const registerRequest = async (reqBody) => {
   try {
@@ -26,6 +26,7 @@ export const loginRequest = async (reqBody) => {
       method: "post",
       url: `${API}/auth/login`,
       data: reqBody,
+      withCredentials: true, //this allows the cookie to be send back to the backend api
     });
 
     let data = res.data;

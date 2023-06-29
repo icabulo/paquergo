@@ -16,10 +16,13 @@ const initialState = {
 };
 
 // get data from API with thunk and a helper function fetchCocktails
-export const getUserAsync = createAsyncThunk("user/getDataFromDb", async () => {
-  const data = await userRequestToApi();
-  return data;
-});
+export const getUserAsync = createAsyncThunk(
+  "user/getDataFromDb",
+  async (email) => {
+    const data = await userRequestToApi(email);
+    return data;
+  }
+);
 
 const userSlice = createSlice({
   name: "userInfo",
@@ -54,8 +57,11 @@ const userSlice = createSlice({
       })
       .addCase(getUserAsync.fulfilled, (state, action) => {
         const userInfo = action.payload;
-        state.isLoading = false;
+        state.userId = userInfo._id.toString();
+        state.isAuthenticated = true;
+        state.userType = userInfo.currentRole;
         state.userFetchedData = userInfo;
+        state.isLoading = false;
       });
   },
 });
