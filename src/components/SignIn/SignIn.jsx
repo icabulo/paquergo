@@ -17,10 +17,7 @@ import FooterSI from "./FooterSI"; //sign in footer imported as a separate compo
 import FertilizeImg from "../../assets/fertilize.png";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
-import {
-  setIsLoading,
-  setIsAuthenticated,
-} from "../../Redux/features/user/userSlice.js";
+import { getUserAsync } from "../../Redux/features/user/userSlice.js";
 import { loginRequest } from "../../api/auth";
 import { useSnackbar } from "notistack";
 
@@ -50,9 +47,8 @@ export default function SignInSide() {
     try {
       const res = await loginRequest(loginData);
       if (res.message === "user Logged in - token created") {
-        // console.log("usuario autendicado");
-        dispatch(setIsAuthenticated(true));
-        dispatch(setIsLoading(false)); //navigation through <Navigate> component below (conditional rendering)
+        console.log("usuario autendicado");
+        dispatch(getUserAsync(loginData.email)); //getuser will set auth and loading states when extra reducer is fulfilled
       } else {
         enqueueSnackbar(`${res.message}`, {
           variant: "warning",
@@ -71,6 +67,7 @@ export default function SignInSide() {
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
       {/* left image */}
+      {/* isAuthenticated is set withing the getUserAsync function */}
       {isAuthenticated && <Navigate to="/dashboard" replace={true} />}
       <Grid
         item
