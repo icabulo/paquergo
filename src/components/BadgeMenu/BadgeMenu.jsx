@@ -12,8 +12,11 @@ import LayersIcon from "@mui/icons-material/Layers";
 import RecyclingIcon from "@mui/icons-material/Recycling";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setUserType } from "../../Redux/features/user/userSlice";
-import { setIsAuthenticated } from "../../Redux/features/user/userSlice.js";
+import {
+  setUserType,
+  setIsAuthenticated,
+} from "../../Redux/features/user/userSlice.js";
+import { updateUserAsync } from "../../Redux/features/user/userSlice.js";
 import { useNavigate } from "react-router-dom";
 
 export default function BadgeMenu() {
@@ -31,6 +34,14 @@ export default function BadgeMenu() {
   const handleLogout = () => {
     dispatch(setIsAuthenticated(false));
     navigate("/");
+  };
+
+  const handleRole = (role = "not selected") => {
+    const reqBody = {
+      currentRole: role,
+    };
+    dispatch(setUserType(reqBody.currentRole)); // this will take effect immediately
+    dispatch(updateUserAsync(reqBody)); // as update is an async operation, user type will be changed after backend reply
   };
 
   return (
@@ -69,13 +80,13 @@ export default function BadgeMenu() {
           Salir
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => dispatch(setUserType("paquerx"))}>
+        <MenuItem onClick={() => handleRole("paquerx")}>
           <ListItemIcon>
             <LayersIcon fontSize="small" />
           </ListItemIcon>
           Paquerx
         </MenuItem>
-        <MenuItem onClick={() => dispatch(setUserType("amigo"))}>
+        <MenuItem onClick={() => handleRole("amigo")}>
           <ListItemIcon>
             <RecyclingIcon fontSize="small" />
           </ListItemIcon>

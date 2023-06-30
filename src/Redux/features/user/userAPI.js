@@ -3,6 +3,7 @@ import { API } from "../../../api/auth.js";
 import axios from "axios";
 
 export const userRequestToApi = async (inputEmail) => {
+  // console.log("input email", inputEmail);
   try {
     const res = await axios({
       method: "get",
@@ -16,6 +17,26 @@ export const userRequestToApi = async (inputEmail) => {
     });
   } catch (error) {
     // console.log("error", error);
+    return new Promise((resolve, reject) => {
+      reject(error);
+    });
+  }
+};
+
+export const updateRequestToApi = async (reqBody, userId) => {
+  try {
+    const res = await axios({
+      method: "put",
+      url: `${API}/user/_id/${userId}`,
+      data: reqBody,
+      withCredentials: true, //will send the token from the cookies
+    });
+
+    return new Promise((resolve, reject) => {
+      resolve(res.data);
+    });
+  } catch (error) {
+    // console.log("error in update request", error);
     return new Promise((resolve, reject) => {
       reject(error);
     });

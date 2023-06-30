@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { userRequestToApi } from "./userAPI";
+import { userRequestToApi, updateRequestToApi } from "./userAPI";
 import { userWasteList } from "../../mockData/myWasteList";
 import { userPacaList } from "../../mockData/myPacaList";
 
@@ -13,6 +13,7 @@ const initialState = {
     "https://res.cloudinary.com/didek0hyg/image/upload/v1686776057/yd6cp2hymggt1bpmxegu.png",
   myWasteList: userWasteList,
   myPacaList: userPacaList,
+  thunkRejectMessage: "",
 };
 
 // get data from API with thunk and a helper function fetchCocktails
@@ -20,6 +21,15 @@ export const getUserAsync = createAsyncThunk(
   "user/getDataFromDb",
   async (email) => {
     const data = await userRequestToApi(email);
+    return data;
+  }
+);
+
+export const updateUserAsync = createAsyncThunk(
+  "user/updateUserInfoDB",
+  async (reqBody, thunkAPI) => {
+    const id = thunkAPI.getState().user.userId;
+    const data = await updateRequestToApi(reqBody, id);
     return data;
   }
 );
@@ -62,6 +72,16 @@ const userSlice = createSlice({
         state.userType = userInfo.currentRole;
         state.userFetchedData = userInfo;
         state.isLoading = false;
+      })
+      .addCase(getUserAsync.rejected, (state, action) => {
+        state.isLoading = false;
+        state.thunkRejectMessage = action.error.message;
+      })
+      .addCase(updateUserAsync.fulfilled, (state, action) => {
+        state.userType = action.payload.currentRole;
+      })
+      .addCase(updateUserAsync.rejected, (state, action) => {
+        state.thunkRejectMessage = action.error.message;
       });
   },
 });
