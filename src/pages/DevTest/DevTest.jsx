@@ -1,12 +1,9 @@
-// import { PaquerxSet } from "../../components/DataSet/Paquerx";
-import { userRequestToApi } from "../../Redux/features/user/userAPI";
-import { SignIn } from "../../components/SignIn";
+import SelectRole from "../../components/SelectRole/SelectRole";
 
 function DevTest() {
   return (
     <>
-      <button onClick={() => userRequestToApi("test3@test.com")}>fetch</button>
-      <SignIn />
+      <SelectRole />
     </>
   );
 }

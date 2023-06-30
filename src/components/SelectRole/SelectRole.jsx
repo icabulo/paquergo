@@ -3,6 +3,9 @@ import { Box, Button, Modal, Typography } from "@mui/material";
 import { useState } from "react";
 import { useDispatch } from "react-redux";
 import { setUserType } from "../../Redux/features/user/userSlice";
+import { updateUserAsync } from "../../Redux/features/user/userSlice";
+import PaquerxCard from "./PaquerxCard";
+import AmigoCard from "./AmigoCard";
 
 //TODO: formulario de nombre personalizado y imagen de perfil
 function SelectRole() {
@@ -14,7 +17,7 @@ function SelectRole() {
     top: "50%",
     left: "50%",
     transform: "translate(-50%, -50%)",
-    width: 400,
+    width: "auto",
     bgcolor: "background.paper",
     border: "secondary",
     boxShadow: 24,
@@ -30,17 +33,24 @@ function SelectRole() {
     myCloseModal();
   };
 
-  const handleAmigo = () => {
-    //call async update usertype in database
-    dispatch(setUserType("amigo"));
+  const handleRole = (role = "not selected") => {
+    const reqBody = {
+      currentRole: role,
+    };
+    dispatch(setUserType(reqBody.currentRole)); // this will take effect immediately
+    dispatch(updateUserAsync(reqBody)); // as update is an async operation, user type will be changed after backend reply
+
     myCloseModal();
   };
 
-  const HandlePaquerx = () => {
-    // TODO: call async update usertype in database
+  /*  const handlePaquerx = () => {
+    const reqBody = {
+      currentRole: "paquerx",
+    };
     dispatch(setUserType("paquerx"));
+    dispatch(updateUserAsync(reqBody));
     myCloseModal();
-  };
+  }; */
 
   return (
     <Modal
@@ -50,12 +60,20 @@ function SelectRole() {
       aria-describedby="modal-modal-description"
     >
       <Box sx={style}>
-        <Typography id="modal-modal-title" variant="h6" component="h2">
-          Selecciona tu rol
+        <Typography
+          id="modal-modal-title"
+          variant="h6"
+          component="h2"
+          textAlign="center"
+        >
+          Hoy Quiero Ser:
         </Typography>
-        <Box id="modal-modal-description">
-          <Button onClick={handleAmigo}>Amigo</Button>
-          <Button onClick={HandlePaquerx}>Paquerx</Button>
+        <Box
+          id="modal-modal-description"
+          sx={{ display: "flex", gap: "20px", marginTop: "10px" }}
+        >
+          <PaquerxCard handleClick={handleRole} />
+          <AmigoCard handleClick={handleRole} />
         </Box>
       </Box>
     </Modal>

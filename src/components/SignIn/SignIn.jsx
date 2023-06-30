@@ -47,7 +47,7 @@ export default function SignInSide() {
     try {
       const res = await loginRequest(loginData);
       if (res.message === "user Logged in - token created") {
-        console.log("usuario autendicado");
+        // console.log("usuario autendicado");
         dispatch(getUserAsync(loginData.email)); //getuser will set auth and loading states when extra reducer is fulfilled
       } else {
         enqueueSnackbar(`${res.message}`, {
