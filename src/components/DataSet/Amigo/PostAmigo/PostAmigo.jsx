@@ -117,7 +117,7 @@ function PostAmigo() {
           type="text"
           required
           id="location"
-          label="Lugar de entraga"
+          label="Lugar de entrega"
           name="location"
           margin="normal"
           autoComplete="location"

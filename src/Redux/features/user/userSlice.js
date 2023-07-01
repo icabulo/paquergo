@@ -5,6 +5,7 @@ import { userPacaList } from "../../mockData/myPacaList";
 
 const initialState = {
   userId: "",
+  myUsername: "",
   userFetchedData: [],
   isLoading: true,
   isAuthenticated: false,
@@ -13,7 +14,8 @@ const initialState = {
     "https://res.cloudinary.com/didek0hyg/image/upload/v1686776057/yd6cp2hymggt1bpmxegu.png",
   myWasteList: userWasteList,
   myPacaList: userPacaList,
-  thunkRejectMessage: "",
+  thunkValidation: "",
+  myLocation: [4.653251013860561, -74.08372879028322],
 };
 
 // get data from API with thunk and a helper function fetchCocktails
@@ -41,11 +43,17 @@ const userSlice = createSlice({
     setUserId: (state, action) => {
       state.userId = action.payload;
     },
+    setMyUsername: (state, action) => {
+      state.myUsername = action.payload;
+    },
     setUserType: (state, action) => {
       state.userType = action.payload;
     },
     setUserImageUrl: (state, action) => {
       state.userImageUrl = action.payload;
+    },
+    setMyLocation: (state, action) => {
+      state.myLocation = action.payload;
     },
     setIsLoading: (state, action) => {
       state.isLoading = action.payload;
@@ -58,6 +66,9 @@ const userSlice = createSlice({
     },
     addToMyPacaPost: (state, action) => {
       state.myPacaList.push(action.payload);
+    },
+    setThunkValidation: (state, action) => {
+      state.thunkValidation = action.payload;
     },
   },
   extraReducers: (builder) => {
@@ -75,24 +86,28 @@ const userSlice = createSlice({
       })
       .addCase(getUserAsync.rejected, (state, action) => {
         state.isLoading = false;
-        state.thunkRejectMessage = action.error.message;
+        state.thunkValidation = action.error.message;
       })
       .addCase(updateUserAsync.fulfilled, (state, action) => {
-        state.userType = action.payload.currentRole;
+        // state.userType = action.payload.currentRole;
+        state.thunkValidation = "fulfilled";
       })
       .addCase(updateUserAsync.rejected, (state, action) => {
-        state.thunkRejectMessage = action.error.message;
+        state.thunkValidation = action.error.message;
       });
   },
 });
 
 export const {
   setUserId,
+  setMyUsername,
   setIsLoading,
   setIsAuthenticated,
   setUserType,
   setUserImageUrl,
   addToMyWastePost,
   addToMyPacaPost,
+  setMyLocation,
+  setThunkValidation,
 } = userSlice.actions;
 export default userSlice.reducer;
