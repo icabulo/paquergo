@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import { useState } from "react";
 import {
-  Avatar,
   Box,
   Button,
   Checkbox,
@@ -13,13 +12,13 @@ import {
   Typography,
 } from "@mui/material";
 import { SignUp } from "../SignUp";
-import FooterSI from "./FooterSI"; //sign in footer imported as a separate component
-import FertilizeImg from "../../assets/fertilize.png";
+import FooterSI from "./Footer"; //sign in footer imported as a separate component
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserAsync } from "../../Redux/features/user/userSlice.js";
 import { loginRequest } from "../../api/authAPI";
 import { useSnackbar } from "notistack";
+import PaquerGoLogo from "./PaquerGoLogo";
 
 export default function SignInSide() {
   const [activeModal, setActiveModal] = useState(false);
@@ -82,22 +81,7 @@ export default function SignInSide() {
           backgroundSize: "cover",
           backgroundPosition: "center",
         }}
-      >
-        {/* <Box
-          xs={false}
-          sx={{
-            my: 18,
-            mx: 4,
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-          }}
-        >
-          <Typography component="h2" variant="h5" color={"white"}>
-            ParquerGo
-          </Typography>
-        </Box> */}
-      </Grid>
+      ></Grid>
       {/* main form */}
       <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
         <Box
@@ -109,24 +93,9 @@ export default function SignInSide() {
             alignItems: "center",
           }}
         >
-          <Avatar
-            alt="compost login icon"
-            src={FertilizeImg}
-            sx={{ width: 70, height: 70 }}
-          />
-          <Typography component="h1" variant="h5">
-            PaquerGo
-          </Typography>
-          <Typography component="p" variant="body1">
-            Conectando Amigos y Paquerxs
-          </Typography>
+          <PaquerGoLogo />
           {/* LOGIN FORM */}
-          <Box
-            component="form"
-            // noValidate
-            onSubmit={handleSubmit}
-            sx={{ mt: 1 }}
-          >
+          <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
             <TextField
               type="email"
               required

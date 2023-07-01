@@ -5,23 +5,20 @@ import { useSnackbar } from "notistack";
 // Leaflet maps
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "./edit-profile.css";
 
 //redux
 import { useDispatch, useSelector } from "react-redux";
-import { updateUserAsync } from "../../Redux/features/user/userSlice";
 import { useNavigate } from "react-router";
 import {
   setMyLocation,
   setMyUsername,
-  setThunkValidation,
 } from "../../Redux/features/user/userSlice";
+import { updateRequestToApi } from "../../api/userAPI";
 
 function EditProfile() {
-  const { thunkValidation, myLocation, myUsername } = useSelector(
-    (store) => store.user
-  );
+  const { myLocation, myUsername, userId } = useSelector((store) => store.user);
   const initialLocation = myLocation;
   const [inputLocation, setInputLocation] = useState(initialLocation);
   const { enqueueSnackbar } = useSnackbar();
@@ -36,34 +33,38 @@ function EditProfile() {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-    const data = new FormData(event.currentTarget);
-    const latlan = formatLocation(data.get("address")); //format text string into array of floats
-    const reqBody = {
-      username: data.get("username"),
-      mapLocation: latlan,
-    };
-    // console.log("data send", reqBody);
-    dispatch(updateUserAsync(reqBody));
-    dispatch(setMyLocation(reqBody.mapLocation));
-    dispatch(setMyUsername(reqBody.username));
-  };
+    try {
+      const data = new FormData(event.currentTarget);
+      const latlan = formatLocation(data.get("address")); //format text string into array of floats
+      const reqBody = {
+        username: data.get("username"),
+        mapLocation: latlan,
+      };
+      // dispatch(updateUserAsync(reqBody));
+      const promiseResponse = await updateRequestToApi(reqBody, userId);
+      if (promiseResponse) {
+        dispatch(setMyLocation(reqBody.mapLocation));
+        dispatch(setMyUsername(reqBody.username));
 
-  useEffect(() => {
-    // console.log("thunk message", thunkValidation);
-    if (thunkValidation === "fulfilled") {
-      enqueueSnackbar("Cambios guardados", {
-        variant: "success",
+        enqueueSnackbar("Cambios guardados", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "center",
+          },
+        });
+        navigate("/dashboard");
+      }
+    } catch (error) {
+      enqueueSnackbar(`Error - ${error.message ? error.message : error}`, {
+        variant: "warning",
         anchorOrigin: {
-          vertical: "top",
+          vertical: "bottom",
           horizontal: "center",
         },
       });
-      navigate("/dashboard");
     }
-    return () => {
-      dispatch(setThunkValidation("clear"));
-    };
-  }, [thunkValidation]);
+  };
 
   return (
     <>
@@ -118,7 +119,6 @@ function EditProfile() {
                 click: (e) => {
                   const { lat, lng } = e.latlng;
                   setInputLocation([lat, lng]);
-                  // console.log("marker clicked", e);
                 },
                 dragend: (e) => {
                   const { lat, lng } = e.target.getLatLng();

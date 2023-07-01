@@ -1,23 +1,29 @@
-import { Link, Typography } from "@mui/material";
+import { Link, Typography, Box } from "@mui/material";
 
 function FooterSI(props) {
   return (
-    <>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        alignItems: "center",
+      }}
+    >
       <Typography
-        variant="body2"
+        variant="caption"
         color="text.secondary"
         align="center"
         {...props}
       >
         {"Copyright © "}
         <Link color="inherit" href="#">
-          Your Website
+          PaquerGo
         </Link>{" "}
         {new Date().getFullYear()}
         {"."}
       </Typography>
       <Typography
-        variant="body2"
+        variant="caption"
         color="text.secondary"
         align="center"
         {...props}
@@ -31,7 +37,7 @@ function FooterSI(props) {
           Freepik - Flaticon
         </Link>
       </Typography>
-    </>
+    </Box>
   );
 }
 export default FooterSI;
