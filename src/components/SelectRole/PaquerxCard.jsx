@@ -12,11 +12,12 @@ import {
 import LayersIcon from "@mui/icons-material/Layers";
 import RecyclingIcon from "@mui/icons-material/Recycling";
 import ChatIcon from "@mui/icons-material/Chat";
+import { PropTypes } from "prop-types";
 
-export default function PaquerxCard({ handleClick }) {
+export default function PaquerxCard({ handleRole }) {
   return (
     <Card sx={{ minWidth: 300 }}>
-      <CardActionArea onClick={() => handleClick("paquerx")}>
+      <CardActionArea onClick={() => handleRole("paquerx")}>
         <CardMedia
           component="img"
           //   height="140"
@@ -56,3 +57,7 @@ export default function PaquerxCard({ handleClick }) {
     </Card>
   );
 }
+
+PaquerxCard.propTypes = {
+  handleRole: PropTypes.func,
+};

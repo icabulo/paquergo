@@ -18,7 +18,7 @@ import FertilizeImg from "../../assets/fertilize.png";
 import { Navigate } from "react-router-dom";
 import { useSelector, useDispatch } from "react-redux";
 import { getUserAsync } from "../../Redux/features/user/userSlice.js";
-import { loginRequest } from "../../api/auth";
+import { loginRequest } from "../../api/authAPI";
 import { useSnackbar } from "notistack";
 
 export default function SignInSide() {
@@ -28,12 +28,10 @@ export default function SignInSide() {
   const { enqueueSnackbar } = useSnackbar();
 
   const handleOpen = () => {
-    // console.log("Modal Opened");
     setActiveModal(true);
   };
 
   const handleClose = () => {
-    // console.log("Modal closed");
     setActiveModal(false);
   };
 
@@ -47,7 +45,6 @@ export default function SignInSide() {
     try {
       const res = await loginRequest(loginData);
       if (res.message === "user Logged in - token created") {
-        // console.log("usuario autendicado");
         dispatch(getUserAsync(loginData.email)); //getuser will set auth and loading states when extra reducer is fulfilled
       } else {
         enqueueSnackbar(`${res.message}`, {
@@ -75,7 +72,6 @@ export default function SignInSide() {
         sm={4}
         md={7}
         sx={{
-          // backgroundImage: `url(${FertilizeImg})`,
           backgroundImage:
             "url(https://images.unsplash.com/photo-1492496913980-501348b61469?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1974&q=80)",
           backgroundRepeat: "no-repeat",

@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { userRequestToApi, updateRequestToApi } from "./userAPI";
+import { userFetchFromApi, updateRequestToApi } from "../../../api/userAPI";
 import { userWasteList } from "../../mockData/myWasteList";
 import { userPacaList } from "../../mockData/myPacaList";
 
@@ -20,7 +20,7 @@ const initialState = {
 export const getUserAsync = createAsyncThunk(
   "user/getDataFromDb",
   async (email) => {
-    const data = await userRequestToApi(email);
+    const data = await userFetchFromApi(email);
     return data;
   }
 );
