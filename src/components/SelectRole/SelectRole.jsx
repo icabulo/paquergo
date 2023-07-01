@@ -7,7 +7,6 @@ import { updateUserAsync } from "../../Redux/features/user/userSlice";
 import PaquerxCard from "./PaquerxCard";
 import AmigoCard from "./AmigoCard";
 
-//TODO: formulario de nombre personalizado y imagen de perfil
 function SelectRole() {
   const [open, setOpen] = useState(true);
   const dispatch = useDispatch();
@@ -37,20 +36,11 @@ function SelectRole() {
     const reqBody = {
       currentRole: role,
     };
-    dispatch(setUserType(reqBody.currentRole)); // this will take effect immediately
+    dispatch(setUserType(role)); // this will take effect immediately
     dispatch(updateUserAsync(reqBody)); // as update is an async operation, user type will be changed after backend reply
 
     myCloseModal();
   };
-
-  /*  const handlePaquerx = () => {
-    const reqBody = {
-      currentRole: "paquerx",
-    };
-    dispatch(setUserType("paquerx"));
-    dispatch(updateUserAsync(reqBody));
-    myCloseModal();
-  }; */
 
   return (
     <Modal
@@ -72,8 +62,8 @@ function SelectRole() {
           id="modal-modal-description"
           sx={{ display: "flex", gap: "20px", marginTop: "10px" }}
         >
-          <PaquerxCard handleClick={handleRole} />
-          <AmigoCard handleClick={handleRole} />
+          <PaquerxCard handleRole={handleRole} />
+          <AmigoCard handleRole={handleRole} />
         </Box>
       </Box>
     </Modal>

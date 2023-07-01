@@ -22,7 +22,7 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import FertilizeImg from "../../assets/fertilize.png";
 import { useState } from "react";
-import { registerRequest } from "../../api/auth";
+import { registerRequest } from "../../api/authAPI";
 
 function FormSignUp({ handleClose }) {
   const { enqueueSnackbar } = useSnackbar();

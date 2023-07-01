@@ -40,7 +40,7 @@ export default function BadgeMenu() {
     const reqBody = {
       currentRole: role,
     };
-    dispatch(setUserType(reqBody.currentRole)); // this will take effect immediately
+    dispatch(setUserType(role)); // this will take effect immediately
     dispatch(updateUserAsync(reqBody)); // as update is an async operation, user type will be changed after backend reply
   };
 
