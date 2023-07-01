@@ -2,8 +2,12 @@ import { useEffect, useState } from "react";
 import { MuiFileInput } from "mui-file-input";
 import { Box, Button } from "@mui/material";
 import { useDispatch } from "react-redux";
-import { setUserImageUrl } from "../../Redux/features/user/userSlice";
 import { useSnackbar } from "notistack";
+import {
+  setUserImageUrl,
+  updateUserAsync,
+} from "../../Redux/features/user/userSlice";
+import { uploadToCloudinary } from "../../api/cloudinaryRequest";
 
 const UploadInput = () => {
   const [file, setFile] = useState(null);
@@ -11,12 +15,7 @@ const UploadInput = () => {
   const dispatch = useDispatch();
   const { enqueueSnackbar } = useSnackbar();
 
-  // cloudinary parameters for image upload.
-  const uploadPreset = import.meta.env.VITE_UPLOADPRESET;
-  const cloudName = "didek0hyg"; //cloudName is public and shown in the image url
-
   const handleChange = (newFile) => {
-    // console.log("handlechange", newFile);
     setFile(newFile);
   };
 
@@ -38,19 +37,8 @@ const UploadInput = () => {
     event.preventDefault();
     if (file !== null) {
       try {
-        const formData = new FormData();
-
-        formData.append("file", file);
-        formData.append("upload_preset", uploadPreset);
-
-        const apiUrl = `https://api.cloudinary.com/v1_1/${cloudName}/image/upload`;
-
-        const request = await fetch(apiUrl, {
-          method: "POST",
-          body: formData,
-        });
-        const data = await request.json();
-        if (data) {
+        const newImageUrl = await uploadToCloudinary(file);
+        if (newImageUrl) {
           enqueueSnackbar("Imagen actualizada", {
             variant: "success",
             anchorOrigin: {
@@ -58,8 +46,12 @@ const UploadInput = () => {
               horizontal: "center",
             },
           });
-          dispatch(setUserImageUrl(data.secure_url));
-          // console.log("URM IMAGE", data.secure_url);
+          dispatch(setUserImageUrl(newImageUrl));
+          const reqBody = {
+            userImage: newImageUrl,
+          };
+          dispatch(updateUserAsync(reqBody));
+
           setFile(null);
         }
       } catch (error) {
