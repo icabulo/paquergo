@@ -42,7 +42,7 @@ const UploadInput = () => {
           enqueueSnackbar("Imagen actualizada", {
             variant: "success",
             anchorOrigin: {
-              vertical: "top",
+              vertical: "bottom",
               horizontal: "center",
             },
           });

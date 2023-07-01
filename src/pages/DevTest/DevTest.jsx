@@ -1,9 +1,9 @@
-import SelectRole from "../../components/SelectRole/SelectRole";
+import UserTitle from "../../components/Dashboard/UserTitle";
 
 function DevTest() {
   return (
     <>
-      <SelectRole />
+      <UserTitle />
     </>
   );
 }

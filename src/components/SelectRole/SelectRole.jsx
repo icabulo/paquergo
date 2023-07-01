@@ -1,9 +1,12 @@
 /* eslint-disable no-unused-vars */
 import { Box, Button, Modal, Typography } from "@mui/material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
-import { setUserType } from "../../Redux/features/user/userSlice";
-import { updateUserAsync } from "../../Redux/features/user/userSlice";
+import {
+  setThunkValidation,
+  setUserType,
+  updateUserAsync,
+} from "../../Redux/features/user/userSlice";
 import PaquerxCard from "./PaquerxCard";
 import AmigoCard from "./AmigoCard";
 
@@ -41,6 +44,12 @@ function SelectRole() {
 
     myCloseModal();
   };
+
+  // when component is dismounted, setThunkValidation message state is reseted.
+  // Otherwise, a popup message will be triggered when the update user form is called
+  useEffect(() => {
+    dispatch(setThunkValidation("clear"));
+  }, []);
 
   return (
     <Modal

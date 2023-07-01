@@ -1,22 +1,18 @@
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import { setIsAuthenticated } from "../../Redux/features/user/userSlice.js";
-import { useNavigate, Outlet, Link as RouterLink } from "react-router-dom";
+import { useNavigate, Outlet } from "react-router-dom";
 
 //MATERIAL UI
 import {
-  Badge,
   Box,
   Button,
   Container,
   CssBaseline,
   Divider,
-  Grid,
   IconButton,
   List,
-  Paper,
   Toolbar,
-  Typography,
 } from "@mui/material";
 import { AppBar, Drawer } from "./customStyle.js";
 import { ThemeProvider } from "@mui/material/styles";
@@ -25,12 +21,14 @@ import { defaultTheme, paquerTheme } from "../../themes/userThemes";
 //ICONS
 import MenuIcon from "@mui/icons-material/Menu";
 import ChevronLeftIcon from "@mui/icons-material/ChevronLeft";
-import NotificationsIcon from "@mui/icons-material/Notifications";
+// import NotificationsIcon from "@mui/icons-material/Notifications";
 
-import Copyright from "./FooterDB";
 import MainList from "./MainList.jsx";
 import SecondaryList from "./SecondaryList.jsx";
 import BadgeMenu from "../BadgeMenu/BadgeMenu.jsx";
+import SelectRole from "../SelectRole/SelectRole.jsx";
+import FooterSI from "../SignIn/Footer.jsx";
+import UserTitle from "./UserTitle.jsx";
 
 export default function Dashboard() {
   const { userType } = useSelector((store) => store.user);
@@ -48,14 +46,16 @@ export default function Dashboard() {
 
   return (
     <ThemeProvider theme={userType === "paquerx" ? paquerTheme : defaultTheme}>
-      {/* toda la pantalla */}
+      {userType === "not selected" && <SelectRole />}
+
+      {/* complete screen */}
       <Box sx={{ display: "flex" }}>
         <CssBaseline />
-        {/* barra superior de color */}
+        {/* top bar - colored bar */}
         <AppBar position="absolute" open={open}>
           <Toolbar
             sx={{
-              pr: "24px", // keep right padding when drawer closed
+              pr: "24px", // keep right padding when drawer closes
             }}
           >
             <IconButton
@@ -70,15 +70,8 @@ export default function Dashboard() {
             >
               <MenuIcon />
             </IconButton>
-            <Typography
-              component="h1"
-              variant="h6"
-              color="inherit"
-              noWrap
-              sx={{ flexGrow: 1 }}
-            >
-              {userType === "paquerx" ? "Paquerx" : "Amigo Abastecedor"}
-            </Typography>
+
+            <UserTitle />
             {/* <IconButton color="inherit">
               <Badge badgeContent={4} color="secondary">
                 <NotificationsIcon />
@@ -90,7 +83,7 @@ export default function Dashboard() {
             </Button>
           </Toolbar>
         </AppBar>
-        {/* menu desplegrable izquierda */}
+        {/* sidebar menu - drawer */}
         <Drawer variant="permanent" open={open}>
           <Toolbar
             sx={{
@@ -113,7 +106,7 @@ export default function Dashboard() {
             <SecondaryList />
           </List>
         </Drawer>
-        {/* pantalla principal main */}
+        {/* Main window display area */}
         <Box
           component="main"
           sx={{
@@ -129,10 +122,10 @@ export default function Dashboard() {
         >
           {/* this toolbar makes the display area to be located below the colored dashboard title */}
           <Toolbar />
-          {/* contenido desplegado en ventana main + copyright footer*/}
+          {/* main router-outlet window + copyright footer*/}
           <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
             <Outlet />
-            <Copyright sx={{ pt: 4 }} />
+            <FooterSI />
           </Container>
         </Box>
       </Box>

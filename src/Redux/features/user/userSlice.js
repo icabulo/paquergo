@@ -82,6 +82,12 @@ const userSlice = createSlice({
         state.isAuthenticated = true;
         state.userType = userInfo.currentRole;
         state.userFetchedData = userInfo;
+        if (userInfo.username) {
+          state.myUsername = userInfo.username;
+        }
+        if (userInfo.userImage) {
+          state.userImageUrl = userInfo.userImage;
+        }
         state.isLoading = false;
       })
       .addCase(getUserAsync.rejected, (state, action) => {
