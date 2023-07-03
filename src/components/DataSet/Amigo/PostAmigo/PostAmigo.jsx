@@ -16,12 +16,12 @@ import "./post-amigo.css";
 // redux
 import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { addToMyWastePost } from "../../../../Redux/features/user/userSlice";
-import { addWastePost } from "../../../../Redux/features/generalMap/generalMapSlice";
+import { createWasteAsync } from "../../../../Redux/features/user/userSlice";
+// import { addWastePost } from "../../../../Redux/features/generalMap/generalMapSlice";
 import { useState } from "react";
 
 function PostAmigo() {
-  const { myLocation } = useSelector((store) => store.user);
+  const { myLocation, myUsername, userId } = useSelector((store) => store.user);
 
   const dispatch = useDispatch();
   const initialLocation = myLocation;
@@ -44,22 +44,15 @@ function PostAmigo() {
     const newPost = {
       wasteId: nanoid(),
       location: latlan,
-      userName: "Mi usuario",
-      userId: "testuser123",
+      userName: myUsername,
+      userId: userId,
       date: dateInput.toISOString(),
       description: data.get("details"),
       deliveryState: "pendiente", //pendiente, asignado, entregado
-      // info: {
-      //   userName: "Mi usuario",
-      //   userId: "testuser123",
-      //   date: dateInput.toISOString(),
-      //   description: data.get("details"),
-      //   deliveryState: "pendiente", //pendiente, asignado, entregado
-      // },
     };
-    console.log(newPost);
-    dispatch(addToMyWastePost(newPost));
-    dispatch(addWastePost(newPost));
+    console.log("post amigo>>", newPost);
+    dispatch(createWasteAsync(newPost));
+    // dispatch(addWastePost(newPost)); //add marker on the general map
     setDetailsInput("");
 
     //success message
