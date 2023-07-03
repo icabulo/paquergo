@@ -1,5 +1,9 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
-import { userFetchFromApi, updateRequestToApi } from "../../../api/userAPI";
+import {
+  userFetchFromApi,
+  updateRequestToApi,
+  getUserWasteFromDB,
+} from "../../../api/userAPI";
 import { userWasteList } from "../../mockData/myWasteList";
 import { userPacaList } from "../../mockData/myPacaList";
 
@@ -32,6 +36,15 @@ export const updateUserAsync = createAsyncThunk(
   async (reqBody, thunkAPI) => {
     const id = thunkAPI.getState().user.userId;
     const data = await updateRequestToApi(reqBody, id);
+    return data;
+  }
+);
+
+export const getUserWasteAsync = createAsyncThunk(
+  "user/getMyWaste",
+  async (reqBody = "", thunkAPI) => {
+    const id = thunkAPI.getState().user.userId;
+    const data = await getUserWasteFromDB(reqBody, id);
     return data;
   }
 );
@@ -100,6 +113,11 @@ const userSlice = createSlice({
       })
       .addCase(updateUserAsync.rejected, (state, action) => {
         state.thunkValidation = action.error.message;
+      })
+      .addCase(getUserWasteAsync.fulfilled, (state, action) => {
+        const wasteInfo = action.payload;
+        state.myWasteList = wasteInfo;
+        // console.log("my waste list from DB", wasteInfo);
       });
   },
 });

@@ -34,3 +34,5 @@ export const loginRequest = async (reqBody) => {
     return error.response.data;
   }
 };
+
+//todo: logout to reset the token

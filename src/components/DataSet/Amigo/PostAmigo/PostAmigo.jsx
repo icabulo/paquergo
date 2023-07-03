@@ -15,14 +15,16 @@ import "./post-amigo.css";
 
 // redux
 import { nanoid } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { addToMyWastePost } from "../../../../Redux/features/user/userSlice";
 import { addWastePost } from "../../../../Redux/features/generalMap/generalMapSlice";
 import { useState } from "react";
 
 function PostAmigo() {
+  const { myLocation } = useSelector((store) => store.user);
+
   const dispatch = useDispatch();
-  const initialLocation = [4.674848840293984, -74.06874582246627];
+  const initialLocation = myLocation;
   const [inputLocation, setInputLocation] = useState(initialLocation);
   const [dateInput, setDateInput] = useState(dayjs());
   const [detailsInput, setDetailsInput] = useState("");
