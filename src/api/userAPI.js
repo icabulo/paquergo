@@ -41,14 +41,6 @@ export const updateRequestToApi = async (reqBody, userId) => {
 
 export const getUserWasteFromDB = async (reqBody, userId) => {
   try {
-    // console.log("get maps data >>", reqBody);
-    // console.log("user id >>", userId);
-    // const allWastesList = await axios({
-    //   method: "get",
-    //   url: `${CONFIG_API.DB}/waste/complete-list`,
-    //   withCredentials: true, //will send the token from the cookies
-    // });
-
     const userWaste = await axios({
       method: "get",
       url: `${CONFIG_API.DB}/waste/user/${userId}`,
@@ -69,10 +61,48 @@ export const getUserWasteFromDB = async (reqBody, userId) => {
       };
     });
 
-    console.log("formated waste list>>", formatedData);
+    // console.log("formated waste list>>", formatedData);
 
     return new Promise((resolve, reject) => {
       resolve(formatedData);
+    });
+  } catch (error) {
+    return new Promise((resolve, reject) => {
+      reject(error);
+    });
+  }
+};
+
+export const createWasteInDB = async (reqBody, userId) => {
+  try {
+    const formatedBody = {
+      location: reqBody.location,
+      description: reqBody.description,
+      user: userId,
+      date: reqBody.date,
+    };
+
+    const userWaste = await axios({
+      method: "post",
+      url: `${CONFIG_API.DB}/waste/new`,
+      data: formatedBody,
+      withCredentials: true, //will send the token from the cookies
+    });
+
+    const rawData = await userWaste.data;
+
+    const newPost = {
+      userName: reqBody.userName, //it'll be nice to refactor this line and get the username from the DB also
+      wasteId: rawData._id.toString(),
+      location: rawData.location,
+      userId: rawData.user,
+      date: rawData.date,
+      description: rawData.description,
+      deliveryState: rawData.deliveryState,
+    };
+
+    return new Promise((resolve, reject) => {
+      resolve(newPost);
     });
   } catch (error) {
     return new Promise((resolve, reject) => {

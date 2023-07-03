@@ -3,6 +3,7 @@ import {
   userFetchFromApi,
   updateRequestToApi,
   getUserWasteFromDB,
+  createWasteInDB,
 } from "../../../api/userAPI";
 import { userWasteList } from "../../mockData/myWasteList";
 import { userPacaList } from "../../mockData/myPacaList";
@@ -45,6 +46,15 @@ export const getUserWasteAsync = createAsyncThunk(
   async (reqBody = "", thunkAPI) => {
     const id = thunkAPI.getState().user.userId;
     const data = await getUserWasteFromDB(reqBody, id);
+    return data;
+  }
+);
+
+export const createWasteAsync = createAsyncThunk(
+  "user/createWaste",
+  async (reqBody, thunkAPI) => {
+    const id = thunkAPI.getState().user.userId;
+    const data = await createWasteInDB(reqBody, id);
     return data;
   }
 );
@@ -107,7 +117,7 @@ const userSlice = createSlice({
         state.isLoading = false;
         state.thunkValidation = action.error.message;
       })
-      .addCase(updateUserAsync.fulfilled, (state, action) => {
+      .addCase(updateUserAsync.fulfilled, (state) => {
         // state.userType = action.payload.currentRole;
         state.thunkValidation = "fulfilled";
       })
@@ -118,6 +128,12 @@ const userSlice = createSlice({
         const wasteInfo = action.payload;
         state.myWasteList = wasteInfo;
         // console.log("my waste list from DB", wasteInfo);
+      })
+      .addCase(createWasteAsync.fulfilled, (state, action) => {
+        state.myWasteList.push(action.payload);
+      })
+      .addCase(createWasteAsync.rejected, (state, action) => {
+        console.log("createWasteAsync rejected", action.error.message);
       });
   },
 });
