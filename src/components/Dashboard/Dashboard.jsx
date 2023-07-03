@@ -1,6 +1,9 @@
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { setIsAuthenticated } from "../../Redux/features/user/userSlice.js";
+import {
+  getUserWasteAsync,
+  setIsAuthenticated,
+} from "../../Redux/features/user/userSlice.js";
 import { useNavigate, Outlet } from "react-router-dom";
 
 //MATERIAL UI
@@ -43,6 +46,11 @@ export default function Dashboard() {
     dispatch(setIsAuthenticated(false));
     navigate("/");
   };
+
+  // fetch wastes and pacas
+  React.useEffect(() => {
+    dispatch(getUserWasteAsync());
+  }, []);
 
   return (
     <ThemeProvider theme={userType === "paquerx" ? paquerTheme : defaultTheme}>

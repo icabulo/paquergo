@@ -2,11 +2,14 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import MyWasteMarker from "./MyWasteMarker";
 import "./my-waste-map.css";
+import { useSelector } from "react-redux";
 
 function MyWasteMap() {
-  const currentLocation = [4.679163148484691, -74.08483538520206];
+  const { myLocation } = useSelector((store) => store.user);
 
-  const initialLocation = [4.705112387457778, -74.08152175280428];
+  const currentLocation = myLocation;
+
+  const initialLocation = myLocation;
 
   return (
     <div className="my-waste-map">
