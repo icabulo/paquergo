@@ -32,6 +32,7 @@ import BadgeMenu from "../BadgeMenu/BadgeMenu.jsx";
 import SelectRole from "../SelectRole/SelectRole.jsx";
 import FooterSI from "../SignIn/Footer.jsx";
 import UserTitle from "./UserTitle.jsx";
+import { logoutRequest } from "../../api/authAPI.js";
 
 export default function Dashboard() {
   const { userType } = useSelector((store) => store.user);
@@ -42,8 +43,9 @@ export default function Dashboard() {
     setOpen(!open);
   };
 
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch(setIsAuthenticated(false));
+    await logoutRequest();
     navigate("/");
   };
 
