@@ -18,6 +18,7 @@ import {
 } from "../../Redux/features/user/userSlice.js";
 import { updateUserAsync } from "../../Redux/features/user/userSlice.js";
 import { useNavigate } from "react-router-dom";
+import { logoutRequest } from "../../api/authAPI.js";
 
 export default function BadgeMenu() {
   const { userImageUrl } = useSelector((store) => store.user);
@@ -31,9 +32,9 @@ export default function BadgeMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
-  const handleLogout = () => {
+  const handleLogout = async () => {
     dispatch(setIsAuthenticated(false));
-    navigate("/");
+    await logoutRequest();
   };
 
   const handleRole = (role = "not selected") => {
