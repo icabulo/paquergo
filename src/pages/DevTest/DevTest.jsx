@@ -1,9 +1,15 @@
-import UserTitle from "../../components/Dashboard/UserTitle";
+import { useDispatch } from "react-redux";
+import { getAllWastesAsync } from "../../Redux/features/generalMap/generalMapSlice";
 
 function DevTest() {
+  const dispatch = useDispatch();
+  const handleSubmit = async () => {
+    console.log("clicked");
+    dispatch(getAllWastesAsync());
+  };
   return (
     <>
-      <UserTitle />
+      <button onClick={handleSubmit}>fetch</button>
     </>
   );
 }
