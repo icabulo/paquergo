@@ -39,7 +39,7 @@ export const updateRequestToApi = async (reqBody, userId) => {
   }
 };
 
-export const getUserWasteFromDB = async (reqBody, userId) => {
+export const getUserWasteFromDB = async (reqBody = "", userId) => {
   try {
     const userWaste = await axios({
       method: "get",
@@ -103,6 +103,39 @@ export const createWasteInDB = async (reqBody, userId) => {
 
     return new Promise((resolve, reject) => {
       resolve(newPost);
+    });
+  } catch (error) {
+    return new Promise((resolve, reject) => {
+      reject(error);
+    });
+  }
+};
+
+export const updateWasteInDB = async (reqBody, userId) => {
+  try {
+    const { location, date, description, deliveryState, wasteId } = reqBody;
+    // avoid modifying the Id in the database
+    const formatedBody = {
+      location,
+      description,
+      date,
+      deliveryState,
+    };
+
+    // 1. update de db with the request
+    await axios({
+      method: "put",
+      url: `${CONFIG_API.DB}/waste/_id/${wasteId}`,
+      data: formatedBody,
+      withCredentials: true, //will send the token from the cookies
+    });
+
+    // 2. get the updated list from theAPI
+    const updatedList = await getUserWasteFromDB("", userId);
+    console.log("secon request response>>", updatedList);
+
+    return new Promise((resolve, reject) => {
+      resolve(updatedList);
     });
   } catch (error) {
     return new Promise((resolve, reject) => {
