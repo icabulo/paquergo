@@ -122,7 +122,7 @@ export const updateWasteInDB = async (reqBody, userId) => {
       deliveryState,
     };
 
-    // 1. update de db with the request
+    // 1. update the db with the request
     await axios({
       method: "put",
       url: `${CONFIG_API.DB}/waste/_id/${wasteId}`,
@@ -132,7 +132,28 @@ export const updateWasteInDB = async (reqBody, userId) => {
 
     // 2. get the updated list from theAPI
     const updatedList = await getUserWasteFromDB("", userId);
-    console.log("secon request response>>", updatedList);
+
+    return new Promise((resolve, reject) => {
+      resolve(updatedList);
+    });
+  } catch (error) {
+    return new Promise((resolve, reject) => {
+      reject(error);
+    });
+  }
+};
+
+export const deleteWasteInDB = async (wasteId, userId) => {
+  try {
+    // 1. delete waste in the db
+    await axios({
+      method: "delete",
+      url: `${CONFIG_API.DB}/waste/_id/${wasteId}`,
+      withCredentials: true, //will send the token from the cookies
+    });
+
+    // 2. get the updated list from theAPI
+    const updatedList = await getUserWasteFromDB("", userId);
 
     return new Promise((resolve, reject) => {
       resolve(updatedList);

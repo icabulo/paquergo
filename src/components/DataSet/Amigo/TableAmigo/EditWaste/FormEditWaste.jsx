@@ -24,7 +24,10 @@ import "leaflet/dist/leaflet.css";
 
 // redux
 import { useDispatch, useSelector } from "react-redux";
-import { updateWasteAsync } from "../../../../../Redux/features/user/userSlice";
+import {
+  deleteWasteAsync,
+  updateWasteAsync,
+} from "../../../../../Redux/features/user/userSlice";
 import { setEditWasteModal } from "../../../../../Redux/features/modalWaste/modalWasteSlice";
 
 import { useState } from "react";
@@ -33,12 +36,13 @@ function FormEditWaste() {
   const { myWasteList, selectedAlertId } = useSelector((store) => store.user);
   const dispatch = useDispatch();
 
-  // get the current wasta data to display in the form inputs
+  // get the current waste data to display in the form inputs
   const currentWaste = myWasteList.filter(
     (item) => item.wasteId === selectedAlertId //selectedAlertId is set when clicking the edit button in the table
   )[0];
 
   const initialLocation = currentWaste.location;
+
   const [inputLocation, setInputLocation] = useState(initialLocation);
   const [dateInput, setDateInput] = useState(dayjs(currentWaste.date));
   const [detailsInput, setDetailsInput] = useState(currentWaste.description);
@@ -77,10 +81,19 @@ function FormEditWaste() {
         horizontal: "center",
       },
     });
-    // dispatch(setEditWasteModal(false)); //close the modal
+    dispatch(setEditWasteModal(false)); //close the modal
   };
   const handleDelete = () => {
-    console.log("borrando aviso ...");
+    dispatch(deleteWasteAsync(selectedAlertId)); // selectedAlertId is not necessary if the wasteID is selected whit thunkAPI, but it needs code refactoring
+    //success message
+    enqueueSnackbar("Aviso borrado", {
+      variant: "error",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "center",
+      },
+    });
+    dispatch(setEditWasteModal(false)); // needs to close the modal, otherwise currentWaste will be undefined
   };
 
   return (
@@ -181,7 +194,7 @@ function FormEditWaste() {
           </FormControl>
         </Box>
         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-          crear aviso
+          Actualizar
         </Button>
         <Button
           variant="outlined"
