@@ -1,5 +1,14 @@
 // Material UI
-import { Box, TextField, Button, Typography } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
 // time and time picker
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -11,24 +20,35 @@ import { useSnackbar } from "notistack";
 // Leaflet maps
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "./post-amigo.css";
+// minimap css class is set globally by default. So it is not necesary to have a new css file with the explicit minimap nameclass
 
 // redux
-import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { createWasteAsync } from "../../../../Redux/features/user/userSlice";
-// import { addWastePost } from "../../../../Redux/features/generalMap/generalMapSlice";
+import { updateWasteAsync } from "../../../../../Redux/features/user/userSlice";
+import { setEditWasteModal } from "../../../../../Redux/features/modalWaste/modalWasteSlice";
+
 import { useState } from "react";
 
-function PostAmigo() {
-  const { myLocation, myUsername, userId } = useSelector((store) => store.user);
-
+function FormEditWaste() {
+  const { myWasteList, selectedAlertId } = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  const initialLocation = myLocation;
+
+  // get the current wasta data to display in the form inputs
+  const currentWaste = myWasteList.filter(
+    (item) => item.wasteId === selectedAlertId //selectedAlertId is set when clicking the edit button in the table
+  )[0];
+
+  const initialLocation = currentWaste.location;
   const [inputLocation, setInputLocation] = useState(initialLocation);
-  const [dateInput, setDateInput] = useState(dayjs());
-  const [detailsInput, setDetailsInput] = useState("");
+  const [dateInput, setDateInput] = useState(dayjs(currentWaste.date));
+  const [detailsInput, setDetailsInput] = useState(currentWaste.description);
+  const [alertState, setAlertState] = useState(currentWaste.deliveryState);
+
   const { enqueueSnackbar } = useSnackbar();
+
+  const handleAlert = (event) => {
+    setAlertState(event.target.value);
+  };
 
   //format text string into array of floats
   const formatLocation = (text) => {
@@ -40,32 +60,35 @@ function PostAmigo() {
     const data = new FormData(event.currentTarget);
     const latlan = formatLocation(data.get("location")); //format text string into array of floats
 
-    const newPost = {
-      wasteId: nanoid(),
+    const reqBody = {
+      wasteId: selectedAlertId, //this is needed to dinamically create the endpoint route. It can also be refactor using the thunkAPI option in the userSlice.js (createWasteAsync)
       location: latlan,
-      userName: myUsername,
-      userId: userId,
       date: dateInput.toISOString(),
       description: data.get("details"),
-      deliveryState: "pendiente", //pendiente, asignado, entregado
+      deliveryState: alertState, //pendiente, asignado, entregado
     };
-    dispatch(createWasteAsync(newPost));
-    // dispatch(addWastePost(newPost)); //add marker on the general map
-    setDetailsInput("");
+    dispatch(updateWasteAsync(reqBody));
 
     //success message
-    enqueueSnackbar("Aviso creado", {
+    enqueueSnackbar("Aviso actualizado", {
       variant: "success",
       anchorOrigin: {
         vertical: "bottom",
         horizontal: "center",
       },
     });
+    // dispatch(setEditWasteModal(false)); //close the modal
   };
+  const handleDelete = () => {
+    console.log("borrando aviso ...");
+  };
+
   return (
     <>
-      <Typography variant="h4">Crear nuevo aviso:</Typography>
-      <Typography variant="h5">Entrego desechos en:</Typography>
+      <Typography variant="h6" component="h2">
+        Actualizar aviso:
+      </Typography>
+      <Typography variant="caption">Mover el marcador del mapa:</Typography>
 
       <div className="minimap">
         <MapContainer center={initialLocation} zoom={14} scrollWheelZoom={true}>
@@ -141,11 +164,35 @@ function PostAmigo() {
           onChange={(e) => setDetailsInput(e.target.value)}
         />
 
+        <Box sx={{ minWidth: 120 }}>
+          <FormControl fullWidth>
+            <InputLabel id="alert-state">Estado de entrega</InputLabel>
+            <Select
+              labelId="alert-state"
+              id="alert-state"
+              value={alertState}
+              label="Estado de entrega"
+              onChange={handleAlert}
+            >
+              <MenuItem value={"pendiente"}>Pendiente</MenuItem>
+              <MenuItem value={"asignado"}>Asignado</MenuItem>
+              <MenuItem value={"entregado"}>Entregado</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
           crear aviso
+        </Button>
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={handleDelete}
+          sx={{ mt: 3, mb: 2, ml: 3 }}
+        >
+          Eliminar aviso
         </Button>
       </Box>
     </>
   );
 }
-export default PostAmigo;
+export default FormEditWaste;

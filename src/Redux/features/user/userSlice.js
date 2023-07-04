@@ -4,6 +4,7 @@ import {
   updateRequestToApi,
   getUserWasteFromDB,
   createWasteInDB,
+  updateWasteInDB,
 } from "../../../api/userAPI";
 import { userWasteList } from "../../mockData/myWasteList";
 import { userPacaList } from "../../mockData/myPacaList";
@@ -21,6 +22,7 @@ const initialState = {
   myPacaList: userPacaList,
   thunkValidation: "",
   myLocation: [4.653251013860561, -74.08372879028322],
+  selectedAlertId: "",
 };
 
 // get data from API with thunk and a helper function fetchCocktails
@@ -59,12 +61,24 @@ export const createWasteAsync = createAsyncThunk(
   }
 );
 
+export const updateWasteAsync = createAsyncThunk(
+  "user/updateWaste",
+  async (reqBody, thunkAPI) => {
+    const id = thunkAPI.getState().user.userId;
+    const data = await updateWasteInDB(reqBody, id);
+    return data;
+  }
+);
+
 const userSlice = createSlice({
   name: "userInfo",
   initialState,
   reducers: {
     setUserId: (state, action) => {
       state.userId = action.payload;
+    },
+    setSelectedAlertId: (state, action) => {
+      state.selectedAlertId = action.payload;
     },
     setMyUsername: (state, action) => {
       state.myUsername = action.payload;
@@ -134,6 +148,13 @@ const userSlice = createSlice({
       })
       .addCase(createWasteAsync.rejected, (state, action) => {
         console.log("createWasteAsync rejected", action.error.message);
+      })
+      .addCase(updateWasteAsync.fulfilled, (state, action) => {
+        state.myWasteList = action.payload;
+        console.log("updateWasteAsync fulfilled", action.payload);
+      })
+      .addCase(updateWasteAsync.rejected, (state, action) => {
+        console.log("updateWasteAsync rejected", action.error.message);
       });
   },
 });
@@ -149,5 +170,6 @@ export const {
   addToMyPacaPost,
   setMyLocation,
   setThunkValidation,
+  setSelectedAlertId,
 } = userSlice.actions;
 export default userSlice.reducer;
