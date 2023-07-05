@@ -4,10 +4,11 @@ import { ChatDashboard } from "./components/ChatDashboard";
 import { ContactsProvider } from "./contexts/ContactsProvider";
 import { ConversationsProvider } from "./contexts/ConversationsProvider";
 import { SocketProvider } from "./contexts/SocketProvider";
+import { useSelector } from "react-redux";
 
 function ChatApp() {
-  const [id, setId] = useLocalStorage("id", "");
-  // console.log(id);
+  const { userId } = useSelector((store) => store.user);
+  const [id, setId] = useLocalStorage("id", userId);
 
   const chatDashboard = (
     <SocketProvider id={id}>

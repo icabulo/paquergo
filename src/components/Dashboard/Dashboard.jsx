@@ -52,6 +52,9 @@ export default function Dashboard() {
   // fetch wastes and pacas
   React.useEffect(() => {
     dispatch(getUserWasteAsync());
+    localStorage.removeItem("PAQUERGO-chat-id");
+    localStorage.removeItem("PAQUERGO-chat-contacts");
+    localStorage.removeItem("PAQUERGO-chat-conversations");
   }, []);
 
   return (
