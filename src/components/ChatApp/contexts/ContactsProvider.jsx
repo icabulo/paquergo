@@ -2,6 +2,7 @@
 /* eslint-disable react/prop-types */
 import { createContext, useContext } from "react";
 import useLocalStorage from "../hooks/useLocalStorage";
+import { useSelector } from "react-redux";
 
 const ContactsContext = createContext();
 
@@ -10,7 +11,9 @@ export function useContacts() {
 }
 
 export function ContactsProvider({ children }) {
-  const [contacts, setContacts] = useLocalStorage("contacts", []);
+  const { chatContacts } = useSelector((store) => store.user);
+
+  const [contacts, setContacts] = useLocalStorage("contacts", chatContacts);
 
   function createContact(id, name) {
     setContacts((prev) => {

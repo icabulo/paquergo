@@ -24,6 +24,8 @@ const initialState = {
   thunkValidation: "",
   myLocation: [4.653251013860561, -74.08372879028322],
   selectedAlertId: "",
+  chatContacts: [],
+  chatConversations: [],
 };
 
 // get data from API with thunk and a helper function fetchCocktails
@@ -137,6 +139,12 @@ const userSlice = createSlice({
           state.userImageUrl = userInfo.userImage;
         }
         state.isLoading = false;
+        if (userInfo.chat.conversations.length) {
+          state.chatConversations = userInfo.chat.conversations;
+        }
+        if (userInfo.chat.contacts.length) {
+          state.chatContacts = userInfo.chat.contacts;
+        }
       })
       .addCase(getUserAsync.rejected, (state, action) => {
         state.isLoading = false;
