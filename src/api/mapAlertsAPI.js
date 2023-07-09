@@ -47,3 +47,47 @@ export const getAllWastesFromDB = async (reqBody = "", userId) => {
     });
   }
 };
+
+export const getAllPacasFromDB = async (reqBody = "", userId) => {
+  try {
+    const listReq = await axios({
+      method: "get",
+      url: `${CONFIG_API.DB}/paca/complete-list`,
+      withCredentials: true, //will send the token from the cookies
+    });
+
+    const rawData = await listReq.data;
+
+    // console.log("API raw data>>", rawData);
+
+    // To do refactor: filter the ones which delivery state != entregado or date lt actual date
+    const formatedData = rawData.map((item) => {
+      const {
+        _id,
+        location,
+        date,
+        pacaState,
+        user: { username: userName },
+        user: { _id: userId },
+      } = item;
+      return {
+        pacaId: _id.toString(),
+        location,
+        date,
+        pacaState,
+        userName,
+        userId: userId.toString(),
+      };
+    });
+
+    // console.log("formated waste list>>", formatedData);
+
+    return new Promise((resolve, reject) => {
+      resolve(formatedData);
+    });
+  } catch (error) {
+    return new Promise((resolve, reject) => {
+      reject(error);
+    });
+  }
+};
