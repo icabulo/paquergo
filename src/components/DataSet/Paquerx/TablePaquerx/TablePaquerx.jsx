@@ -1,8 +1,9 @@
-// import { PostAmigo } from "../../components/PostAmigo";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
+import { EditPaca } from "./EditPaca";
+import OpenEditPaca from "./EditPaca/OpenModalButton";
 
 const columns = [
   {
@@ -17,7 +18,7 @@ const columns = [
     headerName: "Modificar",
     flex: 1,
     renderCell: ({ row: { pacaId } }) => {
-      return <Button id={pacaId}>Editar</Button>;
+      return <OpenEditPaca id={pacaId} />;
     },
   },
   {
@@ -33,9 +34,11 @@ const columns = [
 
 function TablePaquerx() {
   const { myPacaList } = useSelector((store) => store.user);
+  const { modalEditPacaOpen } = useSelector((store) => store.modalWaste);
 
   return (
     <Box>
+      {modalEditPacaOpen && <EditPaca />}
       <Typography>Mis Pacas</Typography>
       <DataGrid
         rows={myPacaList}
@@ -43,15 +46,6 @@ function TablePaquerx() {
         getRowId={(row) => row?.pacaId}
         components={{ Toolbar: GridToolbar }}
         disableRowSelectionOnClick
-        // checkboxSelection
-        // initialState={{
-        //   pagination: {
-        //     paginationModel: {
-        //       pageSize: 4,
-        //     },
-        //   },
-        // }}
-        // pageSizeOptions={[4]}
       />
     </Box>
   );

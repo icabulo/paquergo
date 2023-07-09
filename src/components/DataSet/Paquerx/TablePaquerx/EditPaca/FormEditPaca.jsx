@@ -1,5 +1,14 @@
 // Material UI
-import { Box, TextField, Button, Typography } from "@mui/material";
+import {
+  Box,
+  TextField,
+  Button,
+  Typography,
+  InputLabel,
+  MenuItem,
+  FormControl,
+  Select,
+} from "@mui/material";
 // time and time picker
 import dayjs from "dayjs";
 import { DemoContainer } from "@mui/x-date-pickers/internals/demo";
@@ -11,23 +20,38 @@ import { useSnackbar } from "notistack";
 // Leaflet maps
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
-import "./post-paquerx.css";
+// minimap css class is set globally by default. So it is not necesary to have a new css file with the explicit minimap nameclass
 
 // redux
-import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
-import { createPacaAsync } from "../../../../Redux/features/user/userSlice";
+import {
+  deletePacaAsync,
+  updatePacaAsync,
+} from "../../../../../Redux/features/user/userSlice";
+import { setEditPacaModal } from "../../../../../Redux/features/modalWaste/modalWasteSlice";
+
 import { useState } from "react";
 
-function PostPaquerx() {
-  const { myLocation, myUsername, userId } = useSelector((store) => store.user);
-
+function FormEditWaste() {
+  const { myPacaList, selectedAlertId } = useSelector((store) => store.user);
   const dispatch = useDispatch();
-  const initialLocation = myLocation;
+
+  // get the current waste data to display in the form inputs
+  const currentPaca = myPacaList.filter(
+    (item) => item.pacaId === selectedAlertId //selectedAlertId is set when clicking the edit button in the table
+  )[0];
+
+  const initialLocation = currentPaca.location;
+
   const [inputLocation, setInputLocation] = useState(initialLocation);
-  const [dateInput, setDateInput] = useState(dayjs());
-  //   const [detailsInput, setDetailsInput] = useState("");
+  const [dateInput, setDateInput] = useState(dayjs(currentPaca.date));
+  const [alertState, setAlertState] = useState(currentPaca.pacaState);
+
   const { enqueueSnackbar } = useSnackbar();
+
+  const handleAlert = (event) => {
+    setAlertState(event.target.value);
+  };
 
   //format text string into array of floats
   const formatLocation = (text) => {
@@ -39,29 +63,43 @@ function PostPaquerx() {
     const data = new FormData(event.currentTarget);
     const latlan = formatLocation(data.get("location")); //format text string into array of floats
 
-    const newPost = {
-      pacaId: nanoid(),
+    const reqBody = {
+      pacaId: selectedAlertId, //this is needed to dinamically create the endpoint route. It can also be refactor using the thunkAPI option in the userSlice.js (createWasteAsync)
       location: latlan,
-      userName: myUsername,
-      userId: userId,
       date: dateInput.toISOString(),
-      pacaState: "nuevo", //nuevo, modificado, finalizado
+      pacaState: alertState, //nuevo, modificado, finalizado
     };
-    dispatch(createPacaAsync(newPost));
+    dispatch(updatePacaAsync(reqBody));
 
     //success message
-    enqueueSnackbar("Aviso creado", {
+    enqueueSnackbar("Aviso actualizado", {
       variant: "success",
       anchorOrigin: {
         vertical: "bottom",
         horizontal: "center",
       },
     });
+    dispatch(setEditPacaModal(false)); //close the modal
   };
+  const handleDelete = () => {
+    dispatch(deletePacaAsync(selectedAlertId)); // selectedAlertId is not necessary if the wasteID is selected whit thunkAPI, but it needs code refactoring
+    //success message
+    enqueueSnackbar("Aviso borrado", {
+      variant: "error",
+      anchorOrigin: {
+        vertical: "bottom",
+        horizontal: "center",
+      },
+    });
+    dispatch(setEditPacaModal(false)); // needs to close the modal, otherwise currentPaca will be undefined
+  };
+
   return (
     <>
-      <Typography variant="h4">Crear nuevo aviso:</Typography>
-      <Typography variant="h5">Haré paca en:</Typography>
+      <Typography variant="h6" component="h2">
+        Actualizar aviso:
+      </Typography>
+      <Typography variant="caption">Mover el marcador del mapa:</Typography>
 
       <div className="minimap">
         <MapContainer center={initialLocation} zoom={14} scrollWheelZoom={true}>
@@ -77,7 +115,6 @@ function PostPaquerx() {
               click: (e) => {
                 const { lat, lng } = e.latlng;
                 setInputLocation([lat, lng]);
-                // console.log("marker clicked", e);
               },
               dragend: (e) => {
                 const { lat, lng } = e.target.getLatLng();
@@ -86,7 +123,7 @@ function PostPaquerx() {
             }}
           >
             <Popup>
-              {`La Paca estará acá:`}
+              {`Mis coordenadas:`}
               <br />
               {`Lat: ${inputLocation[0].toFixed(
                 3
@@ -96,23 +133,17 @@ function PostPaquerx() {
         </MapContainer>
       </div>
 
-      <Box
-        component="form"
-        // noValidate
-        onSubmit={handleSubmit}
-        sx={{ mt: 1 }}
-      >
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
           type="text"
           required
           id="location"
-          label="Evento Paca"
+          label="Lugar de entrega"
           name="location"
           margin="normal"
           autoComplete="location"
           fullWidth
           placeholder="coordenadas: [lat, lng], ejemplo: 4.674, -74.068"
-          //   inputRef={locInput}
           value={inputLocation}
         />
 
@@ -120,7 +151,7 @@ function PostPaquerx() {
           <LocalizationProvider dateAdapter={AdapterDayjs}>
             <DemoContainer components={["DateTimePicker", "DateTimePicker"]}>
               <DateTimePicker
-                label="Fecha del evento"
+                label="Fecha de entrega"
                 value={dateInput}
                 onChange={(newValue) => setDateInput(newValue)}
               />
@@ -128,27 +159,35 @@ function PostPaquerx() {
           </LocalizationProvider>
         </Box>
 
-        {/* <TextField
-          type="text"
-          required
-          id="details"
-          label="Descripción"
-          name="details"
-          margin="normal"
-          autoComplete="details"
-          fullWidth
-          variant="outlined"
-          multiline
-          rows={2}
-          value={detailsInput}
-          onChange={(e) => setDetailsInput(e.target.value)}
-        /> */}
-
+        <Box sx={{ minWidth: 120, mt: 2 }}>
+          <FormControl fullWidth>
+            <InputLabel id="alert-state">Estado de la Paca</InputLabel>
+            <Select
+              labelId="alert-state"
+              id="alert-state"
+              value={alertState}
+              label="Estado de entrega"
+              onChange={handleAlert}
+            >
+              <MenuItem value={"nuevo"}>Nuevo</MenuItem>
+              <MenuItem value={"modificado"}>Modificado</MenuItem>
+              <MenuItem value={"finalizado"}>Finalizado</MenuItem>
+            </Select>
+          </FormControl>
+        </Box>
         <Button type="submit" variant="contained" sx={{ mt: 3, mb: 2 }}>
-          crear Paca
+          Actualizar
+        </Button>
+        <Button
+          variant="outlined"
+          color="error"
+          onClick={handleDelete}
+          sx={{ mt: 3, mb: 2, ml: 3 }}
+        >
+          Eliminar aviso
         </Button>
       </Box>
     </>
   );
 }
-export default PostPaquerx;
+export default FormEditWaste;

@@ -1,6 +1,7 @@
 import * as React from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
+  getUserPacaAsync,
   getUserWasteAsync,
   setIsAuthenticated,
 } from "../../Redux/features/user/userSlice.js";
@@ -49,9 +50,11 @@ export default function Dashboard() {
     navigate("/");
   };
 
-  // fetch wastes and pacas
+  // clear local storage data from previous chat.
   React.useEffect(() => {
-    dispatch(getUserWasteAsync());
+    // dispatch(getUserPacaAsync());
+    // dispatch(getUserWasteAsync());
+
     localStorage.removeItem("PAQUERGO-chat-id");
     localStorage.removeItem("PAQUERGO-chat-contacts");
     localStorage.removeItem("PAQUERGO-chat-conversations");

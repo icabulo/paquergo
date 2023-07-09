@@ -6,9 +6,13 @@ import {
   createWasteInDB,
   updateWasteInDB,
   deleteWasteInDB,
+  getUserPacaFromDB,
+  createPacaInDB,
+  updatePacaInDB,
+  deletePacaInDB,
 } from "../../../api/userAPI";
-import { userWasteList } from "../../mockData/myWasteList";
-import { userPacaList } from "../../mockData/myPacaList";
+// import { userWasteList } from "../../mockData/myWasteList";
+// import { userPacaList } from "../../mockData/myPacaList";
 
 const initialState = {
   userId: "",
@@ -19,8 +23,8 @@ const initialState = {
   userType: "not selected",
   userImageUrl:
     "https://res.cloudinary.com/didek0hyg/image/upload/v1686776057/yd6cp2hymggt1bpmxegu.png",
-  myWasteList: userWasteList,
-  myPacaList: userPacaList,
+  myWasteList: [],
+  myPacaList: [],
   thunkValidation: "",
   myLocation: [4.653251013860561, -74.08372879028322],
   selectedAlertId: "",
@@ -46,8 +50,9 @@ export const updateUserAsync = createAsyncThunk(
   }
 );
 
+// WASTES
 export const getUserWasteAsync = createAsyncThunk(
-  "user/getMyWaste",
+  "amigo/getMyWaste",
   async (reqBody = "", thunkAPI) => {
     const id = thunkAPI.getState().user.userId;
     const data = await getUserWasteFromDB(reqBody, id);
@@ -56,7 +61,7 @@ export const getUserWasteAsync = createAsyncThunk(
 );
 
 export const createWasteAsync = createAsyncThunk(
-  "user/createWaste",
+  "amigo/createWaste",
   async (reqBody, thunkAPI) => {
     const id = thunkAPI.getState().user.userId;
     const data = await createWasteInDB(reqBody, id);
@@ -65,7 +70,7 @@ export const createWasteAsync = createAsyncThunk(
 );
 
 export const updateWasteAsync = createAsyncThunk(
-  "user/updateWaste",
+  "amigo/updateWaste",
   async (reqBody, thunkAPI) => {
     const id = thunkAPI.getState().user.userId;
     const data = await updateWasteInDB(reqBody, id);
@@ -74,11 +79,49 @@ export const updateWasteAsync = createAsyncThunk(
 );
 
 export const deleteWasteAsync = createAsyncThunk(
-  "user/deleteWaste",
+  "amigo/deleteWaste",
   async (wasteId, thunkAPI) => {
     const userId = thunkAPI.getState().user.userId;
 
     const data = await deleteWasteInDB(wasteId, userId);
+    return data;
+  }
+);
+
+// PACAS
+export const getUserPacaAsync = createAsyncThunk(
+  "paquerx/getMyPaca",
+  async (reqBody = "", thunkAPI) => {
+    const id = thunkAPI.getState().user.userId;
+    const data = await getUserPacaFromDB(reqBody, id);
+    return data;
+  }
+);
+
+export const createPacaAsync = createAsyncThunk(
+  "paquerx/createPaca",
+  async (reqBody, thunkAPI) => {
+    const id = thunkAPI.getState().user.userId;
+    const data = await createPacaInDB(reqBody, id);
+    return data;
+  }
+);
+
+export const updatePacaAsync = createAsyncThunk(
+  "paquerx/updatePaca",
+  async (reqBody, thunkAPI) => {
+    const id = thunkAPI.getState().user.userId;
+    const data = await updatePacaInDB(reqBody, id);
+    return data;
+  }
+);
+
+export const deletePacaAsync = createAsyncThunk(
+  "paquerx/deletePaca",
+  async (pacaId, thunkAPI) => {
+    const userId = thunkAPI.getState().user.userId;
+
+    const data = await deletePacaInDB(pacaId, userId);
     return data;
   }
 );
@@ -139,6 +182,9 @@ const userSlice = createSlice({
           state.userImageUrl = userInfo.userImage;
         }
         state.isLoading = false;
+        if (userInfo.mapLocation.length) {
+          state.myLocation = userInfo.mapLocation;
+        }
         if (userInfo.chat.conversations.length) {
           state.chatConversations = userInfo.chat.conversations;
         }
@@ -155,6 +201,7 @@ const userSlice = createSlice({
         state.thunkValidation = "fulfilled";
       })
       .addCase(updateUserAsync.rejected, (state, action) => {
+        console.log("updateUserAsync rejected", action.error.message);
         state.thunkValidation = action.error.message;
       })
       .addCase(getUserWasteAsync.fulfilled, (state, action) => {
@@ -179,6 +226,28 @@ const userSlice = createSlice({
       })
       .addCase(deleteWasteAsync.rejected, (state, action) => {
         console.log("deleteWasteAsync rejected", action.error.message);
+      })
+      .addCase(getUserPacaAsync.fulfilled, (state, action) => {
+        const pacaInfo = action.payload;
+        state.myPacaList = pacaInfo;
+      })
+      .addCase(createPacaAsync.fulfilled, (state, action) => {
+        state.myPacaList.push(action.payload);
+      })
+      .addCase(createPacaAsync.rejected, (state, action) => {
+        console.log("createPacaAsync rejected", action.error.message);
+      })
+      .addCase(updatePacaAsync.fulfilled, (state, action) => {
+        state.myPacaList = action.payload;
+      })
+      .addCase(updatePacaAsync.rejected, (state, action) => {
+        console.log("updatePacaAsync rejected", action.error.message);
+      })
+      .addCase(deletePacaAsync.fulfilled, (state, action) => {
+        state.myPacaList = action.payload;
+      })
+      .addCase(deletePacaAsync.rejected, (state, action) => {
+        console.log("deletePacaAsync rejected", action.error.message);
       });
   },
 });

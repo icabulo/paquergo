@@ -1,6 +1,6 @@
 import { Marker, Popup } from "react-leaflet";
-// import { amigoMarker } from "../MarkerIcons/MarkerIcons";
 import { amigoMarker } from "../../../UserMap/MarkerIcons/MarkerIcons";
+
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 

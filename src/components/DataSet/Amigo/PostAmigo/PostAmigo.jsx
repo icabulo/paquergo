@@ -17,7 +17,6 @@ import "./post-amigo.css";
 import { nanoid } from "@reduxjs/toolkit";
 import { useDispatch, useSelector } from "react-redux";
 import { createWasteAsync } from "../../../../Redux/features/user/userSlice";
-// import { addWastePost } from "../../../../Redux/features/generalMap/generalMapSlice";
 import { useState } from "react";
 
 function PostAmigo() {
