@@ -4,6 +4,7 @@ import FormControl from "@mui/material/FormControl";
 import FormGroup from "@mui/material/FormGroup";
 import FormControlLabel from "@mui/material/FormControlLabel";
 import Switch from "@mui/material/Switch";
+import { Box } from "@mui/system";
 
 //LEAFLET
 import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
@@ -13,18 +14,21 @@ import { AmigosMarker } from "./CustomMarkers";
 import "./user-map.css";
 
 import { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
-import { Box } from "@mui/system";
+import { useSelector, useDispatch } from "react-redux";
+import { getAllMarkersAsync } from "../../Redux/features/generalMap/generalMapSlice";
+import { Button } from "@mui/material";
 
 function UserMap() {
-  const { userType } = useSelector((store) => store.user);
+  const { userType, myLocation } = useSelector((store) => store.user);
+  const dispatch = useDispatch();
+
   const [isActive, setIsActive] = useState({
     paca: true,
     waste: true,
   });
-  const currentLocation = [4.679163148484691, -74.08483538520206];
+  const currentLocation = myLocation;
 
-  const initialLocation = [4.705112387457778, -74.08152175280428];
+  const initialLocation = myLocation;
 
   const toggleMarker = (event) => {
     setIsActive({
@@ -41,10 +45,23 @@ function UserMap() {
     });
   }, [userType]);
 
+  // fetch map info from the DB
+  const getMarkersInfo = () => {
+    dispatch(getAllMarkersAsync()); //get waste list
+    // dispatch(getAllPacasAsync()); //get pacas list
+
+    //TODO: get pacas list
+  };
+
+  useEffect(() => {
+    getMarkersInfo();
+  }, []);
+
   return (
     <div className="map-container">
       <FormControl component="fieldset" variant="standard">
         <FormLabel component="legend">Mostra en mapa</FormLabel>
+
         <FormGroup>
           <Box sx={{ display: "flex" }}>
             <FormControlLabel
@@ -87,6 +104,9 @@ function UserMap() {
           {isActive.waste && <AmigosMarker />}
         </MapContainer>
       </div>
+      <Button variant="outlined" size="small" onClick={() => getMarkersInfo()}>
+        recargar Mapa
+      </Button>
     </div>
   );
 }

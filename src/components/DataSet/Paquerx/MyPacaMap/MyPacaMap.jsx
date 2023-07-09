@@ -2,11 +2,14 @@ import { MapContainer, TileLayer, Marker, Popup } from "react-leaflet";
 import "leaflet/dist/leaflet.css";
 import MyPacaMarker from "./MyPacaMarker";
 import "./my-paca-map.css";
+import { useSelector } from "react-redux";
 
 function MyPacaMap() {
-  const currentLocation = [4.664714323348144, -74.13093566894533];
+  const { myLocation } = useSelector((store) => store.user);
 
-  const initialLocation = [4.658554956408209, -74.0801239013672];
+  const currentLocation = myLocation;
+
+  const initialLocation = myLocation;
 
   return (
     <div className="my-paca-map">

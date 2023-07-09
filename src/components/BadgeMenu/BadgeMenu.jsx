@@ -12,8 +12,13 @@ import LayersIcon from "@mui/icons-material/Layers";
 import RecyclingIcon from "@mui/icons-material/Recycling";
 
 import { useSelector, useDispatch } from "react-redux";
-import { setUserType } from "../../Redux/features/user/userSlice";
+import {
+  setUserType,
+  setIsAuthenticated,
+} from "../../Redux/features/user/userSlice.js";
+import { updateUserAsync } from "../../Redux/features/user/userSlice.js";
 import { useNavigate } from "react-router-dom";
+import { logoutRequest } from "../../api/authAPI.js";
 
 export default function BadgeMenu() {
   const { userImageUrl } = useSelector((store) => store.user);
@@ -27,6 +32,19 @@ export default function BadgeMenu() {
   const handleClose = () => {
     setAnchorEl(null);
   };
+  const handleLogout = async () => {
+    dispatch(setIsAuthenticated(false));
+    await logoutRequest();
+  };
+
+  const handleRole = (role = "not selected") => {
+    const reqBody = {
+      currentRole: role,
+    };
+    dispatch(setUserType(role)); // this will take effect immediately
+    dispatch(updateUserAsync(reqBody)); // as update is an async operation, user type will be changed after backend reply
+  };
+
   return (
     <React.Fragment>
       <Tooltip title="Account settings">
@@ -56,20 +74,20 @@ export default function BadgeMenu() {
           </ListItemIcon>
           Editar mi perfil
         </MenuItem>
-        <MenuItem onClick={() => navigate("/")}>
+        <MenuItem onClick={handleLogout}>
           <ListItemIcon>
             <Logout fontSize="small" />
           </ListItemIcon>
           Salir
         </MenuItem>
         <Divider />
-        <MenuItem onClick={() => dispatch(setUserType("paquerx"))}>
+        <MenuItem onClick={() => handleRole("paquerx")}>
           <ListItemIcon>
             <LayersIcon fontSize="small" />
           </ListItemIcon>
           Paquerx
         </MenuItem>
-        <MenuItem onClick={() => dispatch(setUserType("amigo"))}>
+        <MenuItem onClick={() => handleRole("amigo")}>
           <ListItemIcon>
             <RecyclingIcon fontSize="small" />
           </ListItemIcon>

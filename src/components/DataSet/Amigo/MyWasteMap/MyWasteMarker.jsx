@@ -1,11 +1,13 @@
 import { Marker, Popup } from "react-leaflet";
-// import { amigoMarker } from "../MarkerIcons/MarkerIcons";
 import { amigoMarker } from "../../../UserMap/MarkerIcons/MarkerIcons";
+
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 
 function MyWasteMarker() {
-  const { myWasteList } = useSelector((store) => store.user);
+  const { myWasteList, myUsername, userId } = useSelector(
+    (store) => store.user
+  );
 
   return (
     <>
@@ -22,9 +24,9 @@ function MyWasteMarker() {
             <br />
             {`Detalles: ${amigo.description}`}
             <br />
-            {`Entrega: MY_NAME=goes here`}
+            {`Entrega: ${myUsername}`}
             <br />
-            {`chat id: MY_ID=goes here`}
+            {`chat id: ${userId}`}
           </Popup>
         </Marker>
       ))}

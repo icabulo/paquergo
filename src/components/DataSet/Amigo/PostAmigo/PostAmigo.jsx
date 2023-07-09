@@ -15,14 +15,15 @@ import "./post-amigo.css";
 
 // redux
 import { nanoid } from "@reduxjs/toolkit";
-import { useDispatch } from "react-redux";
-import { addToMyWastePost } from "../../../../Redux/features/user/userSlice";
-import { addWastePost } from "../../../../Redux/features/generalMap/generalMapSlice";
+import { useDispatch, useSelector } from "react-redux";
+import { createWasteAsync } from "../../../../Redux/features/user/userSlice";
 import { useState } from "react";
 
 function PostAmigo() {
+  const { myLocation, myUsername, userId } = useSelector((store) => store.user);
+
   const dispatch = useDispatch();
-  const initialLocation = [4.674848840293984, -74.06874582246627];
+  const initialLocation = myLocation;
   const [inputLocation, setInputLocation] = useState(initialLocation);
   const [dateInput, setDateInput] = useState(dayjs());
   const [detailsInput, setDetailsInput] = useState("");
@@ -38,26 +39,17 @@ function PostAmigo() {
     const data = new FormData(event.currentTarget);
     const latlan = formatLocation(data.get("location")); //format text string into array of floats
 
-    // same as in mock data. BUT GOT TO BE FORMATED FOR BACKEND
     const newPost = {
       wasteId: nanoid(),
       location: latlan,
-      userName: "Mi usuario",
-      userId: "testuser123",
+      userName: myUsername,
+      userId: userId,
       date: dateInput.toISOString(),
       description: data.get("details"),
       deliveryState: "pendiente", //pendiente, asignado, entregado
-      // info: {
-      //   userName: "Mi usuario",
-      //   userId: "testuser123",
-      //   date: dateInput.toISOString(),
-      //   description: data.get("details"),
-      //   deliveryState: "pendiente", //pendiente, asignado, entregado
-      // },
     };
-    console.log(newPost);
-    dispatch(addToMyWastePost(newPost));
-    dispatch(addWastePost(newPost));
+    dispatch(createWasteAsync(newPost));
+    // dispatch(addWastePost(newPost)); //add marker on the general map
     setDetailsInput("");
 
     //success message
@@ -88,7 +80,6 @@ function PostAmigo() {
               click: (e) => {
                 const { lat, lng } = e.latlng;
                 setInputLocation([lat, lng]);
-                // console.log("marker clicked", e);
               },
               dragend: (e) => {
                 const { lat, lng } = e.target.getLatLng();
@@ -107,25 +98,18 @@ function PostAmigo() {
         </MapContainer>
       </div>
 
-      <Box
-        component="form"
-        // noValidate
-        onSubmit={handleSubmit}
-        sx={{ mt: 1 }}
-      >
+      <Box component="form" onSubmit={handleSubmit} sx={{ mt: 1 }}>
         <TextField
           type="text"
           required
           id="location"
-          label="Lugar de entraga"
+          label="Lugar de entrega"
           name="location"
           margin="normal"
           autoComplete="location"
           fullWidth
           placeholder="coordenadas: [lat, lng], ejemplo: 4.674, -74.068"
-          //   inputRef={locInput}
           value={inputLocation}
-          // disabled
         />
 
         <Box sx={{ width: "300px" }}>

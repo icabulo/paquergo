@@ -10,6 +10,7 @@ import {
 import useLocalStorage from "../hooks/useLocalStorage";
 import { useContacts } from "./ContactsProvider";
 import { useSocket } from "./SocketProvider";
+import { useSelector } from "react-redux";
 
 const ConversationsContext = createContext();
 
@@ -18,9 +19,11 @@ export function useConversations() {
 }
 
 export function ConversationsProvider({ id, children }) {
+  const { chatConversations } = useSelector((store) => store.user);
+
   const [conversations, setConversations] = useLocalStorage(
     "conversations",
-    []
+    chatConversations
   );
   const [selectedConversationIndex, setSelectedConversationIndex] = useState(0);
   const { contacts } = useContacts();

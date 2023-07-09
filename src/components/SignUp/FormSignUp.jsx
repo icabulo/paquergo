@@ -22,8 +22,9 @@ import { Visibility, VisibilityOff } from "@mui/icons-material";
 import { useSnackbar } from "notistack";
 import FertilizeImg from "../../assets/fertilize.png";
 import { useState } from "react";
+import { registerRequest } from "../../api/authAPI";
 
-function FormSignUp() {
+function FormSignUp({ handleClose }) {
   const { enqueueSnackbar } = useSnackbar();
 
   const initialState = {
@@ -76,7 +77,7 @@ function FormSignUp() {
     return pass === repass;
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     // console.log("submit data", formManager);
     event.preventDefault();
 
@@ -178,42 +179,54 @@ function FormSignUp() {
     // });
 
     const data = {
+      userName: formManager.email.inputValue.split("@")[0],
       email: formManager.email.inputValue,
       password: formManager.password.inputValue,
-      repassword: formManager.repassword.inputValue,
+      // repassword: formManager.repassword.inputValue,
     };
 
-    console.log("Data to be sent to server", data);
+    // console.log("Data to be sent to server", data);
 
-    //if fetch was successfull send message and clear formMaganer state
-    if (data) {
-      enqueueSnackbar("Usuario creado", {
-        variant: "success",
-        anchorOrigin: {
-          vertical: "bottom",
-          horizontal: "center",
-        },
-      });
+    try {
+      const res = await registerRequest(data);
+      // console.log("backend response", res);
+      if (res.id) {
+        enqueueSnackbar("Usuario creado", {
+          variant: "success",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "center",
+          },
+          preventDuplicate: true,
+        });
+        handleClose();
+        //if fetch was successfull send message and clear formMaganer state
 
-      setFormManager((prev) => {
-        const newState = { ...prev };
-        for (const key in prev) {
-          // console.log(key);
-          newState[key] = {
-            ...newState[key],
-            inputValue: "",
-          };
-        }
+        setFormManager((prev) => {
+          const newState = { ...prev };
+          for (const key in prev) {
+            // console.log(key);
+            newState[key] = {
+              ...newState[key],
+              inputValue: "",
+            };
+          }
 
-        return newState;
-      });
+          return newState;
+        });
+      } else {
+        enqueueSnackbar(`${res.message}`, {
+          variant: "warning",
+          anchorOrigin: {
+            vertical: "bottom",
+            horizontal: "center",
+          },
+          preventDuplicate: true,
+        });
+      }
+    } catch (error) {
+      console.log(error);
     }
-    // const data = new FormData(event.currentTarget);
-    // console.log({
-    //   email: data.get("email"),
-    //   password: data.get("password"),
-    //   repassword: data.get("repassword"),
-    // });
   };
 
   return (

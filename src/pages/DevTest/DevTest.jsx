@@ -1,9 +1,15 @@
-import { PaquerxSet } from "../../components/DataSet/Paquerx";
+import { useDispatch } from "react-redux";
+import { getAllMarkersAsync } from "../../Redux/features/generalMap/generalMapSlice";
 
 function DevTest() {
+  const dispatch = useDispatch();
+  const handleSubmit = async () => {
+    console.log("clicked");
+    dispatch(getAllMarkersAsync());
+  };
   return (
     <>
-      <PaquerxSet />
+      <button onClick={handleSubmit}>fetch</button>
     </>
   );
 }

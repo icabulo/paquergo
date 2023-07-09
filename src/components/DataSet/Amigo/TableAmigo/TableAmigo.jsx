@@ -1,8 +1,9 @@
-// import { PostAmigo } from "../../components/PostAmigo";
-import { Box, Typography, Button } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
+import { EditWaste } from "./EditWaste";
+import OpenEditWaste from "./EditWaste/OpenModalButton";
 
 const columns = [
   // { field: "wasteId", headerName: "ID Desecho", flex: 1 },
@@ -19,7 +20,7 @@ const columns = [
     headerName: "Modificar",
     flex: 1,
     renderCell: ({ row: { wasteId } }) => {
-      return <Button id={wasteId}>Editar</Button>;
+      return <OpenEditWaste id={wasteId} />;
     },
   },
   {
@@ -35,9 +36,11 @@ const columns = [
 
 function TableAmigo() {
   const { myWasteList } = useSelector((store) => store.user);
+  const { modalEditWasteOpen } = useSelector((store) => store.modalWaste);
 
   return (
     <Box>
+      {modalEditWasteOpen && <EditWaste />}
       <Typography>Mis avisos</Typography>
       <DataGrid
         rows={myWasteList}
@@ -45,15 +48,6 @@ function TableAmigo() {
         getRowId={(row) => row?.wasteId}
         components={{ Toolbar: GridToolbar }}
         disableRowSelectionOnClick
-        // checkboxSelection
-        // initialState={{
-        //   pagination: {
-        //     paginationModel: {
-        //       pageSize: 4,
-        //     },
-        //   },
-        // }}
-        // pageSizeOptions={[4]}
       />
     </Box>
   );
