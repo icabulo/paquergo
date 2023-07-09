@@ -15,7 +15,7 @@ import "./user-map.css";
 
 import { useEffect, useState } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { getAllWastesAsync } from "../../Redux/features/generalMap/generalMapSlice";
+import { getAllMarkersAsync } from "../../Redux/features/generalMap/generalMapSlice";
 import { Button } from "@mui/material";
 
 function UserMap() {
@@ -47,7 +47,9 @@ function UserMap() {
 
   // fetch map info from the DB
   const getMarkersInfo = () => {
-    dispatch(getAllWastesAsync()); //get waste list
+    dispatch(getAllMarkersAsync()); //get waste list
+    // dispatch(getAllPacasAsync()); //get pacas list
+
     //TODO: get pacas list
   };
 
