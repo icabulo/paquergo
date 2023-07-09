@@ -2,6 +2,7 @@ import { createSlice } from "@reduxjs/toolkit";
 
 const initialState = {
   modalEditWasteOpen: false,
+  modalEditPacaOpen: false,
 };
 
 const modalWasteSlice = createSlice({
@@ -11,8 +12,11 @@ const modalWasteSlice = createSlice({
     setEditWasteModal: (state, action) => {
       state.modalEditWasteOpen = action.payload;
     },
+    setEditPacaModal: (state, action) => {
+      state.modalEditPacaOpen = action.payload;
+    },
   },
 });
 
-export const { setEditWasteModal } = modalWasteSlice.actions;
+export const { setEditWasteModal, setEditPacaModal } = modalWasteSlice.actions;
 export default modalWasteSlice.reducer;

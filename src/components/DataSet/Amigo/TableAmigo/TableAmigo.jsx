@@ -1,10 +1,9 @@
-// import { PostAmigo } from "../../components/PostAmigo";
 import { Box, Typography } from "@mui/material";
 import { DataGrid, GridToolbar } from "@mui/x-data-grid";
 import dayjs from "dayjs";
 import { useSelector } from "react-redux";
 import { EditWaste } from "./EditWaste";
-import OpenModalButton from "./EditWaste/OpenModalButton";
+import OpenEditWaste from "./EditWaste/OpenModalButton";
 
 const columns = [
   // { field: "wasteId", headerName: "ID Desecho", flex: 1 },
@@ -21,7 +20,7 @@ const columns = [
     headerName: "Modificar",
     flex: 1,
     renderCell: ({ row: { wasteId } }) => {
-      return <OpenModalButton id={wasteId} />;
+      return <OpenEditWaste id={wasteId} />;
     },
   },
   {
